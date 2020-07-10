@@ -5,6 +5,10 @@ apply plugin: 'kotlin-kapt'
 
 apply from: 'gradleScripts/dependencies.gradle'
 
+def myConfigPropertiesFile = rootProject.file("config")
+def myConfigProperties = new Properties()
+myConfigProperties.load(new FileInputStream(myConfigPropertiesFile))
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -20,9 +24,14 @@ android {
     }
 
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            buildConfigField("String", "API_KEY","\"${myConfigProperties['apiKey']}\"")
         }
     }
 
@@ -43,10 +52,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
 
     // Kotlin specific dependencies
     implementation kotlinDependencies.kotlinStdlib
@@ -57,6 +62,10 @@ dependencies {
     implementation androidxDependencies.core
     implementation androidxDependencies.appCompat
     implementation androidxDependencies.constraintLayout
+    implementation androidxDependencies.navigationFragment
+    implementation androidxDependencies.recyclerView
+    implementation androidxDependencies.legacy
+    implementation androidxDependencies.lifecycleExtensions
 
 
     // Networking
@@ -72,6 +81,13 @@ dependencies {
 
     // Android KTX
     implementation androidKtx.activityKtx
+    implementation androidKtx.fragmentKtx
     implementation androidKtx.viewModelKtx
     implementation androidKtx.runtimeKtx
+    implementation androidKtx.navigationKtx
+
+    // Test
+    testImplementation testing.junit
+    androidTestImplementation testing.junitAndroid
+    androidTestImplementation testing.espresso
 }

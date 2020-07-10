@@ -97,6 +97,7 @@ lint/tmp/
 .DS_Store
 /build
 /captures
+config
 .externalNativeBuild
 .cxx
 

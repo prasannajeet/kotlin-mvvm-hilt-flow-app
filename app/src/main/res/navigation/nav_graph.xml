@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/popular_photos_fragment">
+
+    <fragment
+        android:id="@+id/popular_photos_fragment"
+        android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PopularPhotosFragment"
+        android:label="Popular Photos"
+        tools:layout="@layout/popular_photos_fragment" />
+
+</navigation>
