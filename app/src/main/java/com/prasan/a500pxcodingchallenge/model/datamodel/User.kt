@@ -33,7 +33,7 @@ data class User(
     @Json(name = "id")
     val id: Int,
     @Json(name = "lastname")
-    val lastname: String,
+    val lastname: String?,
     @Json(name = "registration_date")
     val registrationDate: String,
     @Json(name = "state")
