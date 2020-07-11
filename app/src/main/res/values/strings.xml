@@ -1,4 +1,14 @@
 <resources>
-    <string name="app_name">500pxCodingChallenge</string>
+    <string name="app_name">500px Clone App</string>
     <string name="photo_from_popular_section">Photo from popular section</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="photo_details_label_description">Description:</string>
+    <string name="photo_details_label_likes">Likes:</string>
+    <string name="photo_details_label_comments">Comments:</string>
+    <string name="photo_details_label_rating">Pulse:</string>
+    <string name="photo_details_label_impressions">Viewed:</string>
+    <string name="photo_details_label_title">Title:</string>
+    <string name="photo_details_label_exif">EXIF:</string>
+    <string name="photo_details_label_photographer">Photographer:</string>
+    <string name="photo_details_label_date_uploaded">Date Uploaded:</string>
 </resources>

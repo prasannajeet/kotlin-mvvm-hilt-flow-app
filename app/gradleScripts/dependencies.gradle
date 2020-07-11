@@ -12,13 +12,14 @@ ext {
         activityKtx = "1.1.0"
         fragmentKtx = "1.2.5"
         viewmodelKtx = "2.2.0"
-        httpLoggingInterceptor = "3.11.0"
+        httpLoggingInterceptor = "4.7.2"
         nav_version = "2.3.0"
         legacySupport = "1.0.0"
         lifecycleExtensions = "2.0.0"
         junitVersion = "4.12"
         junitAndroidVersion = "1.1.1"
         espressoVersion = "3.2.0"
+        circleImageViewVersion = "3.1.0"
 
         kotlinDependencies = [
                 kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
@@ -58,5 +59,9 @@ ext {
                 junit: "junit:junit:$junitVersion",
                 junitAndroid: "androidx.test.ext:junit:$junitAndroidVersion",
                 espresso: "androidx.test.espresso:espresso-core:$espressoVersion"
+        ]
+
+        utilLibs = [
+                circleImageView: "de.hdodenhof:circleimageview:$circleImageViewVersion"
         ]
 }

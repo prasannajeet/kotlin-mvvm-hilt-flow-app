@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
+apply plugin: "androidx.navigation.safeargs.kotlin"
 apply from: 'gradleScripts/dependencies.gradle'
 
 def myConfigPropertiesFile = rootProject.file("config")
@@ -36,7 +36,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding true
+        dataBinding true
     }
 
     compileOptions {
@@ -90,4 +90,6 @@ dependencies {
     testImplementation testing.junit
     androidTestImplementation testing.junitAndroid
     androidTestImplementation testing.espresso
+
+    implementation utilLibs.circleImageView
 }

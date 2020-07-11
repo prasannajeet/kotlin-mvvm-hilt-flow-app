@@ -1,9 +1,12 @@
 package com.prasan.a500pxcodingchallenge
 
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.NonNull
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
+import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.squareup.picasso.Picasso
 import retrofit2.Response
 
@@ -12,6 +15,11 @@ import retrofit2.Response
  * @since 1.0
  */
 typealias NetworkCall<T> = suspend () -> Response<T>
+
+/**
+ * [typealias] for lambda passed when a photo is tapped on in [PopularPhotosFragment]
+ */
+typealias PhotoItemClickListener = (Photo) -> Unit
 
 /**
  * Sealed class type-restricts the result of API calls to success and failure. The type
@@ -27,8 +35,8 @@ sealed class APICallResult<out T : Any> {
 }
 
 /**
- * Utility function that works to perform a Retrofit API call and returns either a success model
- * instance or a error message wrapped in a [Exception] class
+ * Utility function that works to perform a Retrofit API call and return either a success model
+ * instance or an error message wrapped in an [Exception] class
  * @param messageInCaseOfError Custom error message to wrap around [APICallResult.OnErrorResponse]
  * with a default value provided for flexibility
  * @param apiCall lambda representing a suspend function for the Retrofit API call
@@ -51,11 +59,26 @@ suspend fun <T : Any> safeApiCall(
  * the url
  * @param url Image URL
  */
-fun ImageView.loadUrl(@NonNull url: String) {
+fun ImageView.loadUrl(
+    @NonNull url: String,
+    error: Drawable = this.context.getDrawable(R.drawable.ic_launcher_foreground)!!
+) {
     Picasso.get()
         .load(url)
-        .error(R.drawable.ic_launcher_foreground) // Sample icon to save time
+        .error(error)
         .into(this)
+}
+
+/**
+ * Alternate implementation to the above loadUrl method using data binding instead of extn functions
+ * @param view [ImageView] to load the image via url
+ * @param url URL of the image
+ * @param error Error [Drawable] to show when image doesn't load successfully
+ * @since 1.0
+ */
+@BindingAdapter("imageUrl")
+fun loadImage(view: ImageView, url: String) {
+    view.loadUrl(url)
 }
 
 /**
@@ -71,6 +94,22 @@ sealed class UIState<out T : Any> {
 
 fun Fragment.showToast(@NonNull message: String) {
     Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Photo.getFormattedExifData() = StringBuilder().apply {
+    append(if (camera.isBlank()) "Unknown Camera" else camera)
+    append(" + ")
+    append(if (lens.isBlank()) "Unknown Lens" else lens)
+    append(" | ")
+    append(if (focalLength.isBlank()) "0mm" else focalLength + "mm")
+    appendln()
+    append(if (aperture.isBlank()) "f0" else "f/$aperture")
+    append(" | ")
+    append(if (shutterSpeed.isBlank()) "0s" else shutterSpeed + "s")
+    append(" | ")
+    append(if (aperture.isBlank()) "ISO0" else "ISO$iso")
+}.run {
+    toString()
 }
 
 const val baseURL = "https://api.500px.com/"

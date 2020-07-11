@@ -9,6 +9,20 @@
         android:id="@+id/popular_photos_fragment"
         android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PopularPhotosFragment"
         android:label="Popular Photos"
-        tools:layout="@layout/popular_photos_fragment" />
+        tools:layout="@layout/popular_photos_fragment">
+        <action
+            android:id="@+id/action_popular_photos_fragment_to_photo_details_fragment"
+            app:destination="@id/photo_details_fragment">
+            <argument
+                android:name="photoDetails"
+                app:argType="com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/photo_details_fragment"
+        android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PhotoDetailsFragment"
+        android:label="Photo Details"
+        tools:layout="@layout/fragment_photo_details" />
 
 </navigation>
