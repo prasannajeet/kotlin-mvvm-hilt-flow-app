@@ -101,3 +101,4 @@ config
 .externalNativeBuild
 .cxx
 
+/.idea/.name
