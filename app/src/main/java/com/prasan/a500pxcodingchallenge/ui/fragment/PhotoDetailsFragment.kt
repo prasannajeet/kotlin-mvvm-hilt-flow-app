@@ -13,7 +13,12 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
 
-
+/**
+ * [Fragment] displays details of the photo tapped on in [PopularPhotosFragment]
+ * @author Prasan
+ * @since 1.0
+ * @see [MainViewModel]
+ */
 class PhotoDetailsFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()

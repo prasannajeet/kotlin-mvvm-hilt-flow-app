@@ -15,6 +15,14 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import com.prasan.a500pxcodingchallenge.ui.PopularPhotosAdapter
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
 
+/**
+ * This [Fragment] displays a list of popular photos from 500px in a paginated fashion, the next page of data
+ * is loaded when the scrolling of the current list of items is at its end. On loading, the API calls the first
+ * page of data.
+ * @author Prasan
+ * @since 1.0
+ * @see [MainViewModel]
+ */
 class PopularPhotosFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
@@ -53,6 +61,13 @@ class PopularPhotosFragment : Fragment() {
 
         binding = PopularPhotosFragmentBinding.inflate(inflater)
 
+        return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.popularPhotoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -87,7 +102,5 @@ class PopularPhotosFragment : Fragment() {
         })
 
         viewModel.getPhotosNextPage()
-
-        return binding.root
     }
 }

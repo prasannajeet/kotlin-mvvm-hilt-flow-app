@@ -98,15 +98,40 @@ fun loadImage(view: ImageView, url: String) {
  * @since 1.0
  */
 sealed class UIState<out T : Any> {
+
+    /**
+     * Represents UI state where the UI should be showing a loading UX to the user
+     * @param isLoading will be true when the loading UX needs to display, false when not
+     */
     data class LoadingState(val isLoading: Boolean) : UIState<Nothing>()
+
+    /**
+     * Represents the UI state where the operation requested by the UI has been completed successfully
+     * and the output of type [T] as asked by the UI has been provided to it
+     * @param output result object of [T] type representing the fruit of the successful operation
+     */
     data class OnOperationSuccess<out T : Any>(val output: T) : UIState<T>()
+
+    /**
+     * Represents the UI state where the operation requested by the UI has failed to complete
+     * either due to a IO issue or a service exception and the same is conveyed back to the UI
+     * to be shown the user
+     * @param exception [Exception] instance containing the root cause of the failure in a [String]
+     */
     data class OnOperationFailed(val exception: Exception) : UIState<Nothing>()
 }
 
+/**
+ * Extension function on a fragment to show a toast message
+ */
 fun Fragment.showToast(@NonNull message: String) {
     Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show()
 }
 
+/**
+ * Extension function on a [Photo] class that will convert the camera data into a single
+ * string to be shown on the details screen
+ */
 fun Photo.getFormattedExifData() = StringBuilder().apply {
     append(if (camera.isBlank()) "Unknown Camera" else camera)
     append(" + ")

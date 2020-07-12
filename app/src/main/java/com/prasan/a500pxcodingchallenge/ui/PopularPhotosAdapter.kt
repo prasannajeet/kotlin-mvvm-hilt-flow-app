@@ -9,6 +9,11 @@ import com.prasan.a500pxcodingchallenge.loadUrl
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import kotlin.properties.Delegates
 
+/**
+ * Adapter class for list of popular photos
+ * @author Prasan
+ *
+ */
 class PopularPhotosAdapter(
     private val itemClickListener: PhotoItemClickListener
 ) :
@@ -31,6 +36,11 @@ class PopularPhotosAdapter(
 
     override fun getItemCount() = itemList.size
 
+    /**
+     * ViewHolder class for [PopularPhotosAdapter]
+     * @author Prasan
+     * @since 1.0
+     */
     class PopularPhotosViewHolder(private val binding: PopularPhotosItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

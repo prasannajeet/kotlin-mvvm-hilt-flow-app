@@ -12,6 +12,15 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import kotlinx.coroutines.launch
 
+/**
+ * In an MVVM architecture, the [ViewModel] acts as the point at which the view and the data layers
+ * of the applicable interface in order to implemented the business logic. This ViewModel contains
+ * methods to show the list of popular photos in a paginated fashion as well as to parse the [Bundle]
+ * arguments to show details of the page. In this app architecture, a single ViewModel is shared between
+ * all fragments in the application
+ * @author Prasan
+ * @since 1.0
+ */
 class MainViewModel : ViewModel() {
 
     /**
@@ -28,8 +37,8 @@ class MainViewModel : ViewModel() {
         MutableLiveData<UIState<PhotoDetails>>()
     }
 
-    private var currentPageNumber = 1 // Page number currently displayed
-    private var maximumPageNumber = 2 // Total number of pages available
+    private var currentPageNumber = 1 // Page number currently displayed in UI
+    private var maximumPageNumber = 2 // Total number of pages available in the paginated service
     private val photoList =
         ArrayList<Photo>() // VM maintains the list of photos and adds new photos per page
 
@@ -41,6 +50,7 @@ class MainViewModel : ViewModel() {
 
     /**
      * Retrieve the photos per page from the popular photos API and inform the view by [MutableLiveData]
+     * @since 1.0
      */
     fun getPhotosNextPage() {
 
@@ -74,6 +84,7 @@ class MainViewModel : ViewModel() {
     /**
      * Process the [Bundle] argument from the list fragment to process the photo details
      * @param args [Bundle] object containing parcelized [PhotoDetails] instance
+     * @since 1.0
      */
     fun processPhotoDetailsArgument(@NonNull args: Bundle) {
 
