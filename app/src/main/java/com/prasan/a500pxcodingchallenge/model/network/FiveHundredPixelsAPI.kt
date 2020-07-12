@@ -10,6 +10,7 @@ interface FiveHundredPixelsAPI {
     @GET("/v1/photos")
     suspend fun getPopularPhotos(
         @Query("consumer_key") key: String,
-        @Query("feature") popular: String
+        @Query("feature") popular: String,
+        @Query("page") page: Int
     ): Response<PhotoResponse>
 }

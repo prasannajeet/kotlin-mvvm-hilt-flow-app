@@ -29,11 +29,12 @@ object FHPRepository {
         }
     }
 
-    suspend fun getPopularPhotos(): APICallResult<PhotoResponse> =
+    suspend fun getPopularPhotos(pageNumber: Int): APICallResult<PhotoResponse> =
         safeApiCall("Error Obtaining Photos") {
             retrofitClient.getPopularPhotos(
                 BuildConfig.API_KEY,
-                "popular"
+                "popular",
+                pageNumber
             )
         }
 

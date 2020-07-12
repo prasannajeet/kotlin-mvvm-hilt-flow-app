@@ -7,12 +7,16 @@ import com.prasan.a500pxcodingchallenge.PhotoItemClickListener
 import com.prasan.a500pxcodingchallenge.databinding.PopularPhotosItemBinding
 import com.prasan.a500pxcodingchallenge.loadUrl
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
+import kotlin.properties.Delegates
 
 class PopularPhotosAdapter(
-    private val itemList: List<Photo>,
     private val itemClickListener: PhotoItemClickListener
 ) :
     RecyclerView.Adapter<PopularPhotosAdapter.PopularPhotosViewHolder>() {
+
+    var itemList: List<Photo> by Delegates.observable(emptyList()) { _, _, _ ->
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularPhotosViewHolder =
         PopularPhotosViewHolder(PopularPhotosItemBinding.inflate(LayoutInflater.from(parent.context)))
@@ -23,7 +27,6 @@ class PopularPhotosAdapter(
         val photo = itemList[position]
         holder.bind(photo)
         holder.itemView.setOnClickListener { itemClickListener(photo) }
-
     }
 
     override fun getItemCount() = itemList.size

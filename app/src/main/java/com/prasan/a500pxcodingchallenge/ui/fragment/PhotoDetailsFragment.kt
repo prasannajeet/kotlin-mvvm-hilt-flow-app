@@ -16,7 +16,7 @@ import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
 
 class PhotoDetailsFragment : Fragment() {
 
-    private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPhotoDetailsBinding
     private var photo: PhotoDetails? = null
 

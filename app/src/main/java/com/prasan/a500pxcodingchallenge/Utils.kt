@@ -21,6 +21,8 @@ typealias NetworkCall<T> = suspend () -> Response<T>
  */
 typealias PhotoItemClickListener = (Photo) -> Unit
 
+typealias OnNextPageDataCallback = () -> Unit
+
 /**
  * Sealed class type-restricts the result of API calls to success and failure. The type
  * <T> represents the model class expected from the API call in case of a success
@@ -61,10 +63,12 @@ suspend fun <T : Any> safeApiCall(
  */
 fun ImageView.loadUrl(
     @NonNull url: String,
-    error: Drawable = this.context.getDrawable(R.drawable.ic_launcher_foreground)!!
+    placeholder: Drawable = this.context.getDrawable(R.drawable.ic_launcher_foreground)!!,
+    error: Drawable = this.context.getDrawable(R.drawable.ic_launcher_background)!!
 ) {
     Picasso.get()
         .load(url)
+        .placeholder(placeholder)
         .error(error)
         .into(this)
 }

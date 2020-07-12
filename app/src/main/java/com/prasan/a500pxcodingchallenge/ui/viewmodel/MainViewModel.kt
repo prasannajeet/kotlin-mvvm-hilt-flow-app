@@ -14,32 +14,69 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
+    /**
+     * [MutableLiveData] to notify the Popular photos list view with the list of photos
+     */
     val popularPhotosLiveData: MutableLiveData<UIState<List<Photo>>> by lazy {
         MutableLiveData<UIState<List<Photo>>>()
     }
+
+    /**
+     * [MutableLiveData] to provide the [PhotoDetails] parsed value for a particular photo
+     */
     val photoDetailsLiveData: MutableLiveData<UIState<PhotoDetails>> by lazy {
         MutableLiveData<UIState<PhotoDetails>>()
     }
 
-    fun getPopularPhotos() {
+    private var currentPageNumber = 1 // Page number currently displayed
+    private var maximumPageNumber = 2 // Total number of pages available
+    private val photoList =
+        ArrayList<Photo>() // VM maintains the list of photos and adds new photos per page
 
-        viewModelScope.launch {
+    var navigatingFromDetails =
+        false // This is a dirty implementation to avoid reloading the popular photo
+    // fragment when back navigating from details. This is an issue with the Android Navigation Component that destroys
+    // the fragment after navigation. Alternative implementation to store view in a variable will have memory leak
+    // implications (https://twitter.com/ianhlake/status/1103522856535638016)
 
-            popularPhotosLiveData.value = UIState.LoadingState(true)
+    /**
+     * Retrieve the photos per page from the popular photos API and inform the view by [MutableLiveData]
+     */
+    fun getPhotosNextPage() {
 
-            when (val result = GetPopularPhotosUseCase().execute()) {
-                is APICallResult.OnErrorResponse ->
-                    popularPhotosLiveData.value = UIState.OnOperationFailed(result.exception)
-                is APICallResult.OnSuccessResponse ->
-                    popularPhotosLiveData.value =
-                        UIState.OnOperationSuccess(result.data.photos)
+        if (navigatingFromDetails) {
+            popularPhotosLiveData.value = UIState.OnOperationSuccess(photoList)
+            return
+        }
+
+
+        if (currentPageNumber < maximumPageNumber) {
+
+            viewModelScope.launch {
+
+                popularPhotosLiveData.value = UIState.LoadingState(true)
+                when (val result = GetPopularPhotosUseCase().execute(currentPageNumber)) {
+                    is APICallResult.OnErrorResponse ->
+                        popularPhotosLiveData.value = UIState.OnOperationFailed(result.exception)
+                    is APICallResult.OnSuccessResponse -> {
+                        currentPageNumber++
+                        maximumPageNumber = result.data.totalPages
+                        photoList.addAll(result.data.photos)
+                        popularPhotosLiveData.value =
+                            UIState.OnOperationSuccess(photoList)
+                    }
+                }
+                popularPhotosLiveData.value = UIState.LoadingState(false)
             }
-
-            popularPhotosLiveData.value = UIState.LoadingState(false)
         }
     }
 
+    /**
+     * Process the [Bundle] argument from the list fragment to process the photo details
+     * @param args [Bundle] object containing parcelized [PhotoDetails] instance
+     */
     fun processPhotoDetailsArgument(@NonNull args: Bundle) {
+
         val photoDetails = args.getParcelable<PhotoDetails>("photoDetails")
 
         photoDetails?.let {

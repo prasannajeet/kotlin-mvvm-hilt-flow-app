@@ -23,6 +23,10 @@
         android:id="@+id/photo_details_fragment"
         android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PhotoDetailsFragment"
         android:label="Photo Details"
-        tools:layout="@layout/fragment_photo_details" />
+        tools:layout="@layout/fragment_photo_details">
+        <action
+            android:id="@+id/action_photo_details_fragment_to_popular_photos_fragment"
+            app:popUpTo="@id/popular_photos_fragment" />
+    </fragment>
 
 </navigation>
