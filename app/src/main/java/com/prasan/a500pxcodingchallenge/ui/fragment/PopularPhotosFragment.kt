@@ -19,7 +19,10 @@ class PopularPhotosFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: PopularPhotosFragmentBinding
-    private val paginationCallback: OnNextPageDataCallback = { viewModel.getPhotosNextPage() }
+    private val performPageDataLoad: NextPageDataLoader = {
+        viewModel.navigatingFromDetails = false
+        viewModel.getPhotosNextPage()
+    }
     private val photoItemClickListener: PhotoItemClickListener = {
 
         val photoDetails = PhotoDetails(
@@ -56,7 +59,7 @@ class PopularPhotosFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    paginationCallback()
+                    performPageDataLoad()
                 }
             }
         })
