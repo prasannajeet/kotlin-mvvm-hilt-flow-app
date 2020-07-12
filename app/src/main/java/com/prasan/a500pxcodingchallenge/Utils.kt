@@ -54,7 +54,11 @@ suspend fun <T : Any> safeApiCall(
     messageInCaseOfError: String = "Network IO error",
     apiCall: NetworkCall<T>
 ): APICallResult<T> {
-    val response = apiCall()
+    val response = try {
+        apiCall()
+    } catch (e: Exception) {
+        return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result - ${e.message}"))
+    }
     if (response.isSuccessful) return APICallResult.OnSuccessResponse(response.body()!!)
     return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result, Custom ERROR - $messageInCaseOfError"))
 }
