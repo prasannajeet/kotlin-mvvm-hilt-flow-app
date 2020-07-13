@@ -67,6 +67,8 @@ dependencies {
     implementation androidxDependencies.legacy
     implementation androidxDependencies.lifecycleExtensions
 
+    // UI
+    implementation utilLibs.circleImageView
 
     // Networking
     implementation networkingDependencies.retrofitCore
@@ -90,6 +92,7 @@ dependencies {
     testImplementation testing.junit
     androidTestImplementation testing.junitAndroid
     androidTestImplementation testing.espresso
-
-    implementation utilLibs.circleImageView
+    testImplementation testing.mockk
+    testImplementation testing.coroutinesTest
+    testImplementation testing.androidCoreTest
 }
