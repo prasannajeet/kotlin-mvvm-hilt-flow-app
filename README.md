@@ -1,8 +1,6 @@
 # 500px Clone App   
 ## Introduction      
-This application is a simple implementation of the popular images feature of 500px which uses [500px API](https://github.com/500px/legacy-api-documentation)         
-        
-The application is built using modern Android development strategies focusing on the following key aspects:     
+This application is a simple implementation of the popular images feature of 500px which using the [500px API](https://github.com/500px/legacy-api-documentation) built using modern Android development strategies focusing on the following key aspects:     
 - Code structuring as per clean Architecture      
 - Using MVVM Pattern as per Google's recommendation      
 - Android Architecture Components (LiveData, ViewModel, Navigation)        
@@ -26,7 +24,8 @@ Navigation between the screens has been done using the Jetpack Navigation librar
     
 <img alt="Nav Graph" height="250px" src="https://raw.githubusercontent.com/prasannajeet/500px-clone-app/master/Navigation_Graph.png" />      
       
-## Libraries The App uses libraries and tools used to build Modern Android application, mainly part of Android Jetpack - [Kotlin](https://kotlinlang.org/) first        
+## Libraries The App uses libraries and tools used to build Modern Android application, mainly part of Android Jetpack 
+- [Kotlin](https://kotlinlang.org/) first        
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)        
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)        
 - [Retrofit](https://square.github.io/retrofit/)        
@@ -38,7 +37,7 @@ Navigation between the screens has been done using the Jetpack Navigation librar
 ### Scope for Improvements        
  The app can be further improved with the addition of the following features        
         
-- Dagger2/Koin for resolving dependencies      
-- Flow  instead of Coroutines for API call results      
+- Dagger2/Koin for resolving dependencies between ViewModel, UseCase and Repository classes     
+- Flow instead of Coroutines for API call results      
 - Dynamic image sizes using multiple ViewHolders for different image sizes instead of current GridLayoutManager implementation  
 - Espresso Tests
