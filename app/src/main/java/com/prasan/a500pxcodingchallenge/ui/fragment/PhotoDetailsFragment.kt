@@ -30,6 +30,7 @@ class PhotoDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPhotoDetailsBinding.inflate(inflater)
+        retainInstance = true
         return binding.root
     }
 

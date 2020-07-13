@@ -56,6 +56,7 @@ class PopularPhotosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = PopularPhotosFragmentBinding.inflate(inflater)
+        retainInstance = true
         return binding.root
     }
 
