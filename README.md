@@ -1,19 +1,18 @@
 # 500px Clone App   
 ## Introduction      
- This is a simple implementation of the popular images feature of 500px which uses [500px API](https://github.com/500px/legacy-api-documentation)         
+This application is a simple implementation of the popular images feature of 500px which uses [500px API](https://github.com/500px/legacy-api-documentation)         
         
-The application is built using the most modern Android development strategies.        
-        
-The codebase focuses on following key things:        
+The application is built using modern Android development strategies focusing on the following key aspects:     
 - Code structuring as per clean Architecture      
 - Using MVVM Pattern as per Google's recommendation      
 - Android Architecture Components (LiveData, ViewModel, Navigation)        
 - Kotlin features (Lambdas, Extension functions, typealias, sealed class and Coroutines)        
       
-## API Key In order to use the app, you would need to create a file called "config" your project root folder and in it add your 500px API key using the string "apiKey={your API key}". Then go back to the project and force a gradle sync. The file is part of the .gitignore of the project in order to prevent any accidental commit.      
+## API Key 
+In order to use the app, you would need to create a file called "config" your project root folder and in it add your 500px API key using the string "apiKey={your API key}". Then go back to the project and force a gradle sync. The file is part of the .gitignore of the project in order to prevent any accidental commit.      
       
 ## App Overview      
- The app features a 2 screen design      
+ The app features a 2 screen navigation      
       
 - List screen displaying popular images in a paginated fashion      
          
@@ -40,6 +39,6 @@ Navigation between the screens has been done using the Jetpack Navigation librar
  The app can be further improved with the addition of the following features        
         
 - Dagger2/Koin for resolving dependencies      
-- Flow  instead of Coroutines for API call results       
+- Flow  instead of Coroutines for API call results      
 - Dynamic image sizes using multiple ViewHolders for different image sizes instead of current GridLayoutManager implementation  
 - Espresso Tests
