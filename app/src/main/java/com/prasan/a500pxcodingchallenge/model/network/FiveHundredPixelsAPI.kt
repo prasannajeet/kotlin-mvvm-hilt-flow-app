@@ -19,10 +19,14 @@ interface FiveHundredPixelsAPI {
      * @param page Page number of the data where the photos should come from
      * @return [Response] instance of [PhotoResponse] type
      */
-    @GET("/v1/photos")
+    @GET("/v1/photos?image_size=5,6")
     suspend fun getPopularPhotos(
         @Query("consumer_key") key: String,
         @Query("feature") feature: String,
         @Query("page") page: Int
     ): Response<PhotoResponse>
+
+    //NOTE: As per https://github.com/500px/legacy-api-documentation/blob/master/basics/formats_and_terms.md#image-urls-and-image-sizes
+    // image_size=5,6 should return a array of Images with variable sizes, but in the response only 1 size is being obtained
+
 }
