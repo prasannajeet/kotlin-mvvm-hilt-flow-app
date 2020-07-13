@@ -128,17 +128,18 @@ fun Fragment.showToast(@NonNull message: String) {
  * string to be shown on the details screen
  */
 fun Photo.getFormattedExifData() = StringBuilder().apply {
-    append(if (camera.isBlank()) "Unknown Camera" else camera)
+
+    append(if (camera != null && camera.isBlank()) "Unknown Camera" else camera)
     append(" + ")
-    append(if (lens.isBlank()) "Unknown Lens" else lens)
+    append(if (lens != null && lens.isBlank()) "Unknown Lens" else lens)
     append(" | ")
-    append(if (focalLength.isBlank()) "0mm" else focalLength + "mm")
+    append(if (focalLength != null && focalLength.isBlank()) "0mm" else focalLength + "mm")
     appendln()
-    append(if (aperture.isBlank()) "f0" else "f/$aperture")
+    append(if (aperture != null && aperture.isBlank()) "f0" else "f/$aperture")
     append(" | ")
-    append(if (shutterSpeed.isBlank()) "0s" else shutterSpeed + "s")
+    append(if (shutterSpeed != null && shutterSpeed.isBlank()) "0s" else shutterSpeed + "s")
     append(" | ")
-    append(if (aperture.isBlank()) "ISO0" else "ISO$iso")
+    append(if (iso != null && iso.isBlank()) "ISO0" else "ISO$iso")
 }.run {
     toString()
 }

@@ -39,8 +39,8 @@ class PopularPhotosFragment : Fragment() {
             it.rating,
             it.timesViewed,
             it.name,
-            it.user.fullname,
-            it.user.avatars.default.https,
+            it.user?.fullname,
+            it.user?.avatars?.default?.https,
             it.getFormattedExifData()
         )
         findNavController()
