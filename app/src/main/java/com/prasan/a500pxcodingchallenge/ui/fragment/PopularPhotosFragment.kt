@@ -9,9 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.prasan.a500pxcodingchallenge.*
+import com.prasan.a500pxcodingchallenge.PhotoItemClickListener
+import com.prasan.a500pxcodingchallenge.UIState
 import com.prasan.a500pxcodingchallenge.databinding.PopularPhotosFragmentBinding
+import com.prasan.a500pxcodingchallenge.getFormattedExifData
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
+import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.PopularPhotosAdapter
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
 
@@ -27,12 +30,7 @@ class PopularPhotosFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: PopularPhotosFragmentBinding
-    private val performPageDataLoad: NextPageDataLoader = {
-        viewModel.navigatingFromDetails = false
-        viewModel.getPhotosNextPage()
-    }
     private val photoItemClickListener: PhotoItemClickListener = {
-
         val photoDetails = PhotoDetails(
             it.images[0].httpsUrl,
             it.description,
@@ -50,7 +48,6 @@ class PopularPhotosFragment : Fragment() {
                 PopularPhotosFragmentDirections
                     .actionPopularPhotosFragmentToPhotoDetailsFragment(photoDetails)
             )
-
         viewModel.navigatingFromDetails = true
     }
 
@@ -58,9 +55,7 @@ class PopularPhotosFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = PopularPhotosFragmentBinding.inflate(inflater)
-
         return binding.root
     }
 
@@ -74,7 +69,7 @@ class PopularPhotosFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    performPageDataLoad()
+                    viewModel.onRecyclerViewScrolledToBottom()
                 }
             }
         })

@@ -22,11 +22,6 @@ typealias NetworkCall<T> = suspend () -> Response<T>
 typealias PhotoItemClickListener = (Photo) -> Unit
 
 /**
- * Typealias for lambda representing action to load the next page of data upon being called
- */
-typealias NextPageDataLoader = () -> Unit
-
-/**
  * Sealed class type-restricts the result of API calls to success and failure. The type
  * <T> represents the model class expected from the API call in case of a success
  * In case of success, the result will be wrapped around the OnSuccessResponse class

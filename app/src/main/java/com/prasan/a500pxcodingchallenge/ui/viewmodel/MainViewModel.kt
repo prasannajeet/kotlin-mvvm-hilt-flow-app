@@ -97,4 +97,9 @@ class MainViewModel : ViewModel() {
                 UIState.OnOperationFailed(Exception("No Photo Details found"))
         }
     }
+
+    fun onRecyclerViewScrolledToBottom() {
+        if (navigatingFromDetails) navigatingFromDetails = false
+        getPhotosNextPage()
+    }
 }
