@@ -98,6 +98,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    /**
+     * ViewModel function called by view when the list is scrolled to its bottommost position
+     * in order to load the next page of data from the serve
+     */
     fun onRecyclerViewScrolledToBottom() {
         if (navigatingFromDetails) navigatingFromDetails = false
         getPhotosNextPage()
