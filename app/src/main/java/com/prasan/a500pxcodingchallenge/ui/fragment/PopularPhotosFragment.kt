@@ -80,7 +80,7 @@ class PopularPhotosFragment : Fragment() {
                 is UIState.LoadingState ->
                     binding.loading.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
                 is UIState.OnOperationFailed ->
-                    uiState.exception.message?.let { toastMessage ->
+                    uiState.throwable.message?.let { toastMessage ->
                         showToast(toastMessage)
                     }
                 is UIState.OnOperationSuccess -> {
