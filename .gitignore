@@ -102,3 +102,4 @@ config
 .cxx
 
 /.idea/.name
+/.idea/detekt.xml

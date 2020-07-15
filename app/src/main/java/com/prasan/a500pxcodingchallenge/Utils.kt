@@ -49,11 +49,7 @@ suspend fun <T : Any> safeApiCall(
     messageInCaseOfError: String = "Network IO error",
     apiCall: NetworkCall<T>
 ): APICallResult<T> {
-    val response = try {
-        apiCall()
-    } catch (e: Exception) {
-        return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result - ${e.message}"))
-    }
+    val response = apiCall()
     if (response.isSuccessful) return APICallResult.OnSuccessResponse(response.body()!!)
     return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result, Custom ERROR - $messageInCaseOfError"))
 }
@@ -113,7 +109,7 @@ sealed class UIState<out T : Any> {
      * to be shown the user
      * @param exception [Exception] instance containing the root cause of the failure in a [String]
      */
-    data class OnOperationFailed(val exception: Exception) : UIState<Nothing>()
+    data class OnOperationFailed(val throwable: Throwable) : UIState<Nothing>()
 }
 
 /**

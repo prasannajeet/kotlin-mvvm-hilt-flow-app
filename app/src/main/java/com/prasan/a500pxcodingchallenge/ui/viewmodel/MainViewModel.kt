@@ -10,6 +10,7 @@ import com.prasan.a500pxcodingchallenge.UIState
 import com.prasan.a500pxcodingchallenge.domain.GetPopularPhotosUseCase
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 /**
@@ -28,6 +29,13 @@ class MainViewModel : ViewModel() {
      */
     val popularPhotosLiveData: MutableLiveData<UIState<List<Photo>>> by lazy {
         MutableLiveData<UIState<List<Photo>>>()
+    }
+
+    private val exceptionHandler: CoroutineExceptionHandler by lazy {
+        CoroutineExceptionHandler { _, throwable ->
+            popularPhotosLiveData.value = UIState.LoadingState(false)
+            popularPhotosLiveData.value = UIState.OnOperationFailed(throwable)
+        }
     }
 
     /**
@@ -62,7 +70,7 @@ class MainViewModel : ViewModel() {
 
         if (currentPageNumber < maximumPageNumber) {
 
-            viewModelScope.launch {
+            viewModelScope.launch(exceptionHandler) {
 
                 popularPhotosLiveData.value = UIState.LoadingState(true)
                 when (val result = GetPopularPhotosUseCase().execute(currentPageNumber)) {

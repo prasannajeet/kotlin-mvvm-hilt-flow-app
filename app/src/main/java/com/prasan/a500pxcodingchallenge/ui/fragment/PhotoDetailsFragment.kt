@@ -41,7 +41,7 @@ class PhotoDetailsFragment : Fragment() {
                 is UIState.OnOperationSuccess ->
                     binding.photoDetails = uiState.output
                 is UIState.OnOperationFailed ->
-                    showToast(uiState.exception.message!!)
+                    showToast(uiState.throwable.message!!)
             }
         })
 
