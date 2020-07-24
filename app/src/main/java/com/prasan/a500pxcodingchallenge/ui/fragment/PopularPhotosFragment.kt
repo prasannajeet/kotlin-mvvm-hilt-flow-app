@@ -17,6 +17,7 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.PopularPhotosAdapter
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
+import com.prasan.a500pxcodingchallenge.ui.viewmodel.ViewModelFactory
 
 /**
  * This [Fragment] displays a list of popular photos from 500px in a paginated fashion, the next page of data
@@ -28,7 +29,7 @@ import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
  */
 class PopularPhotosFragment : Fragment() {
 
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels { ViewModelFactory() }
     private lateinit var binding: PopularPhotosFragmentBinding
     private val photoItemClickListener: PhotoItemClickListener = {
         val photoDetails = PhotoDetails(
