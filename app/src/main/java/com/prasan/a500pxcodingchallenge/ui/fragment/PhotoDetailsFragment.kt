@@ -12,7 +12,6 @@ import com.prasan.a500pxcodingchallenge.databinding.FragmentPhotoDetailsBinding
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
-import com.prasan.a500pxcodingchallenge.ui.viewmodel.ViewModelFactory
 
 /**
  * [Fragment] displays details of the photo tapped on in [PopularPhotosFragment]
@@ -22,7 +21,7 @@ import com.prasan.a500pxcodingchallenge.ui.viewmodel.ViewModelFactory
  */
 class PhotoDetailsFragment : Fragment() {
 
-    private val viewModel: MainViewModel by activityViewModels { ViewModelFactory() }
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPhotoDetailsBinding
     private var photo: PhotoDetails? = null
 
