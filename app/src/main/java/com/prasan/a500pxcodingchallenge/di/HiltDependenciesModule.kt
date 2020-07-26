@@ -23,21 +23,35 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 @Module
 object HiltDependenciesModule {
 
+    @Provides
+    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    @Provides
+    fun provideOKHttpClient(loggingInterceptor: HttpLoggingInterceptor) = OkHttpClient().apply {
+        OkHttpClient.Builder().run {
+            addInterceptor(loggingInterceptor)
+            build()
+        }
+    }
+
+    @Provides
+    fun provideMoshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
+
     /**
      * Returns an instance of the [FiveHundredPixelsAPI] interface for the retrofit class
      * @return [FiveHundredPixelsAPI] impl
      */
     @Provides
-    fun provideRetrofitInstance(): FiveHundredPixelsAPI =
+    fun provideRetrofitInstance(
+        client: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory
+    ): FiveHundredPixelsAPI =
         Retrofit.Builder().run {
             baseUrl(baseURL)
-            addConverterFactory(MoshiConverterFactory.create())
-            client(OkHttpClient().apply {
-                OkHttpClient.Builder().run {
-                    addInterceptor(HttpLoggingInterceptor())
-                    build()
-                }
-            })
+            addConverterFactory(moshiConverterFactory)
+            client(client)
             build()
         }.run {
             create(FiveHundredPixelsAPI::class.java)
