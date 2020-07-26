@@ -2,6 +2,7 @@ package com.prasan.a500pxcodingchallenge.ui.viewmodel
 
 import android.os.Bundle
 import androidx.annotation.NonNull
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +23,9 @@ import kotlinx.coroutines.launch
  * @author Prasan
  * @since 1.0
  */
-class MainViewModel : ViewModel() {
+class MainViewModel @ViewModelInject constructor(
+    private val getPopularPhotosUseCase: GetPopularPhotosUseCase
+) : ViewModel() {
 
     /**
      * [MutableLiveData] to notify the Popular photos list view with the list of photos
@@ -73,7 +76,7 @@ class MainViewModel : ViewModel() {
             viewModelScope.launch(exceptionHandler) {
 
                 popularPhotosLiveData.value = UIState.LoadingState(true)
-                when (val result = GetPopularPhotosUseCase().execute(currentPageNumber)) {
+                when (val result = getPopularPhotosUseCase.execute(currentPageNumber)) {
                     is APICallResult.OnErrorResponse ->
                         popularPhotosLiveData.value = UIState.OnOperationFailed(result.exception)
                     is APICallResult.OnSuccessResponse -> {

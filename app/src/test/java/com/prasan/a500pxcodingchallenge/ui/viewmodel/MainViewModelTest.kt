@@ -5,11 +5,14 @@ import androidx.lifecycle.Observer
 import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.TestCoroutineRule
 import com.prasan.a500pxcodingchallenge.UIState
-import com.prasan.a500pxcodingchallenge.domain.FHPRepository
+import com.prasan.a500pxcodingchallenge.domain.GetPopularPhotosUseCase
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -19,12 +22,6 @@ import org.mockito.ArgumentMatchers.anyList
 
 @ExperimentalCoroutinesApi
 class MainViewModelTest {
-
-    private val viewModel: MainViewModel by lazy {
-        MainViewModel()
-    }
-
-    private val mockRepository: FHPRepository = mockk()
 
     // Set the main coroutines dispatcher for unit testing.
     @ExperimentalCoroutinesApi
@@ -45,6 +42,12 @@ class MainViewModelTest {
     @RelaxedMockK
     private lateinit var mockException: Exception
 
+    @RelaxedMockK
+    private lateinit var mockUseCase: GetPopularPhotosUseCase
+
+    private val viewModel: MainViewModel by lazy {
+        MainViewModel(mockUseCase)
+    }
 
     @Before
     fun setup() {
@@ -56,11 +59,9 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            mockkObject(FHPRepository)
-            coEvery { FHPRepository.getPopularPhotos(1) } returns APICallResult.OnSuccessResponse(
+            coEvery { mockUseCase.execute(1) } returns APICallResult.OnSuccessResponse(
                 mockPhotoResponse
             )
-
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.getPhotosNextPage()
@@ -77,12 +78,9 @@ class MainViewModelTest {
     fun `when load photos service throws error UIState is OnOperationError`() {
 
         runBlockingTest {
-
-            mockkObject(FHPRepository)
-
             every { mockException.message } returns "Test Exception"
 
-            coEvery { FHPRepository.getPopularPhotos(1) } returns APICallResult.OnErrorResponse(
+            coEvery { mockUseCase.execute(1) } returns APICallResult.OnErrorResponse(
                 mockException
             )
 
@@ -103,8 +101,7 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            mockkObject(FHPRepository)
-            coEvery { FHPRepository.getPopularPhotos(1) } returns APICallResult.OnSuccessResponse(
+            coEvery { mockUseCase.execute(1) } returns APICallResult.OnSuccessResponse(
                 mockPhotoResponse
             )
 
@@ -124,11 +121,9 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            mockkObject(FHPRepository)
-
             every { mockException.message } returns "Test Exception"
 
-            coEvery { FHPRepository.getPopularPhotos(1) } returns APICallResult.OnErrorResponse(
+            coEvery { mockUseCase.execute(1) } returns APICallResult.OnErrorResponse(
                 mockException
             )
 

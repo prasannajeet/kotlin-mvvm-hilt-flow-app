@@ -2,6 +2,8 @@ package com.prasan.a500pxcodingchallenge.domain
 
 import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * [UseCase] class implementation that retrieves a paginated list of photos from the service
@@ -9,7 +11,10 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
  * @author Prasan
  * @since 1.0
  */
-class GetPopularPhotosUseCase : UseCase<Int, PhotoResponse> {
+@Singleton
+class GetPopularPhotosUseCase @Inject constructor(private val repository: IRepository) :
+    UseCase<Int, PhotoResponse> {
+
     override suspend fun execute(input: Int): APICallResult<PhotoResponse> =
-        FHPRepository.getPopularPhotos(input)
+        (repository as FHPRepository).getPopularPhotos(input)
 }

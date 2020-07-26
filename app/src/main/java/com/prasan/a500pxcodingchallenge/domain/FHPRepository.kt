@@ -2,14 +2,11 @@ package com.prasan.a500pxcodingchallenge.domain
 
 import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.BuildConfig
-import com.prasan.a500pxcodingchallenge.baseURL
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
 import com.prasan.a500pxcodingchallenge.model.network.FiveHundredPixelsAPI
 import com.prasan.a500pxcodingchallenge.safeApiCall
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * The repository class represents the data store of the application. This class is primarily utilised
@@ -18,23 +15,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * @author Prasan
  * @since 1.0
  */
-object FHPRepository {
-
-    private val retrofitClient: FiveHundredPixelsAPI by lazy {
-        Retrofit.Builder().run {
-            baseUrl(baseURL)
-            addConverterFactory(MoshiConverterFactory.create())
-            client(OkHttpClient().apply {
-                OkHttpClient.Builder().run {
-                    addInterceptor(HttpLoggingInterceptor())
-                    build()
-                }
-            })
-            build()
-        }.run {
-            create(FiveHundredPixelsAPI::class.java)
-        }
-    }
+@Singleton
+class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredPixelsAPI) :
+    IRepository {
 
     /**
      * Performs the popular photos API call. In an offline-first architecture, it is at this function
