@@ -31,13 +31,12 @@ Navigation between the screens has been done using the Jetpack Navigation librar
 - [Retrofit](https://square.github.io/retrofit/)        
 - [Moshi](https://github.com/square/moshi)        
 - [Picasso](https://square.github.io/picasso/)        
+- [Hilt](https://dagger.dev/hilt/) for dependency injection
 - [Android KTX](https://developer.android.com/kotlin/ktx) features      
 - [MockK](https://mockk.io/) for unit testing  
         
 ### Scope for Improvements        
  The app can be further improved with the addition of the following features        
-        
-- Dagger2/Koin for resolving dependencies between ViewModel, UseCase and Repository classes     
 - Flow instead of Coroutines for API call results      
 - Dynamic image sizes using multiple ViewHolders for different image sizes instead of current GridLayoutManager implementation  
 - Espresso Tests
