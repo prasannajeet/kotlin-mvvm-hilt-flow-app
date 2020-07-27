@@ -13,7 +13,7 @@ import org.junit.runner.Description
  * dispatcher that is Android Specific
  */
 @ExperimentalCoroutinesApi
-class TestCoroutineRule(val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
+class TestCoroutineRule(private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
     TestWatcher() {
     override fun starting(description: Description?) {
         super.starting(description)

@@ -84,7 +84,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-*.iml
 .gradle
 /local.properties
 /.idea/caches
@@ -98,7 +97,6 @@ lint/tmp/
 /build
 /captures
 config
-.externalNativeBuild
 .cxx
 
 /.idea/.name

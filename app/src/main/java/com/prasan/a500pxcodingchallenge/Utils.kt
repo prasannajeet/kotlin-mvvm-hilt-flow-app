@@ -25,7 +25,7 @@ import java.net.SocketTimeoutException
 typealias NetworkCall<T> = suspend () -> Response<T>
 
 /**
- * [typealias] for lambda passed when a photo is tapped on in [PopularPhotosFragment]
+ * Typealias for lambda passed when a photo is tapped on in Popular Photos Fragment
  */
 typealias PhotoItemClickListener = (Photo) -> Unit
 
@@ -97,7 +97,6 @@ fun ImageView.loadUrl(
  * Alternate implementation to the above loadUrl method using data binding instead of extn functions
  * @param view [ImageView] to load the image via url
  * @param url URL of the image
- * @param error Error [Drawable] to show when image doesn't load successfully
  * @since 1.0
  */
 @BindingAdapter("imageUrl")
@@ -129,7 +128,7 @@ sealed class UIState<out T : Any> {
      * Represents the UI state where the operation requested by the UI has failed to complete
      * either due to a IO issue or a service exception and the same is conveyed back to the UI
      * to be shown the user
-     * @param exception [Exception] instance containing the root cause of the failure in a [String]
+     * @param throwable [Throwable] instance containing the root cause of the failure in a [String]
      */
     data class OnOperationFailed(val throwable: Throwable) : UIState<Nothing>()
 }

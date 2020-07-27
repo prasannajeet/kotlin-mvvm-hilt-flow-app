@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.prasan.a500pxcodingchallenge.UIState
 import com.prasan.a500pxcodingchallenge.databinding.FragmentPhotoDetailsBinding
-import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
 
@@ -23,7 +22,6 @@ class PhotoDetailsFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPhotoDetailsBinding
-    private var photo: PhotoDetails? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

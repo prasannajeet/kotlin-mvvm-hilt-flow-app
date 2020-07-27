@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
  * @author Prasan
  * @since 1.0
  */
-@ExperimentalCoroutinesApi
 class MainViewModel @ViewModelInject constructor(
     private val getPopularPhotosUseCase: GetPopularPhotosUseCase
 ) : ViewModel() {
@@ -66,6 +65,7 @@ class MainViewModel @ViewModelInject constructor(
      * Retrieve the photos per page from the popular photos API and inform the view by [MutableLiveData]
      * @since 1.0
      */
+    @ExperimentalCoroutinesApi
     fun getPhotosNextPage() {
 
         if (navigatingFromDetails) {
@@ -121,6 +121,7 @@ class MainViewModel @ViewModelInject constructor(
      * ViewModel function called by view when the list is scrolled to its bottommost position
      * in order to load the next page of data from the serve
      */
+    @ExperimentalCoroutinesApi
     fun onRecyclerViewScrolledToBottom() {
         if (navigatingFromDetails) navigatingFromDetails = false
         getPhotosNextPage()
