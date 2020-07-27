@@ -85,9 +85,9 @@ dependencies {
     // Android KTX
     implementation androidKtx.activityKtx
     implementation androidKtx.fragmentKtx
-    implementation androidKtx.viewModelKtx
     implementation androidKtx.runtimeKtx
     implementation androidKtx.navigationKtx
+    implementation androidKtx.liveDataKtx
 
     // Test
     testImplementation testing.junit

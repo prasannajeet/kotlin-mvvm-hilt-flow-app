@@ -5,6 +5,7 @@ import androidx.annotation.NonNull
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.UIState
@@ -14,6 +15,7 @@ import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 /**
@@ -41,13 +43,6 @@ class MainViewModel @ViewModelInject constructor(
             popularPhotosLiveData.value = UIState.LoadingState(false)
             popularPhotosLiveData.value = UIState.OnOperationFailed(throwable)
         }
-    }
-
-    /**
-     * [MutableLiveData] to provide the [PhotoDetails] parsed value for a particular photo
-     */
-    val photoDetailsLiveData: MutableLiveData<UIState<PhotoDetails>> by lazy {
-        MutableLiveData<UIState<PhotoDetails>>()
     }
 
     private var currentPageNumber = 1 // Page number currently displayed in UI
@@ -105,17 +100,18 @@ class MainViewModel @ViewModelInject constructor(
      * @param args [Bundle] object containing parcelized [PhotoDetails] instance
      * @since 1.0
      */
-    fun processPhotoDetailsArgument(@NonNull args: Bundle) {
+    fun processPhotoDetailsArgument(@NonNull args: Bundle) =
 
-        val photoDetails = args.getParcelable<PhotoDetails>("photoDetails")
+        flow {
+            val photoDetails = args.getParcelable<PhotoDetails>("photoDetails")
 
-        photoDetails?.let {
-            photoDetailsLiveData.value = UIState.OnOperationSuccess(it)
-        } ?: run {
-            photoDetailsLiveData.value =
-                UIState.OnOperationFailed(Exception("No Photo Details found"))
-        }
-    }
+            photoDetails?.let {
+                emit(UIState.OnOperationSuccess(it))
+            } ?: run {
+                emit(UIState.OnOperationFailed(Exception("No Photo Details found")))
+
+            }
+        }.asLiveData()
 
     /**
      * ViewModel function called by view when the list is scrolled to its bottommost position

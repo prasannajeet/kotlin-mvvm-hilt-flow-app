@@ -56,7 +56,8 @@ ext {
                 fragmentKtx: "androidx.fragment:fragment-ktx:$fragmentKtx",
                 viewModelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodelKtx",
                 runtimeKtx: "androidx.lifecycle:lifecycle-runtime-ktx:$viewmodelKtx",
-                navigationKtx: "androidx.navigation:navigation-ui-ktx:$nav_version"
+                navigationKtx: "androidx.navigation:navigation-ui-ktx:$nav_version",
+                liveDataKtx: "androidx.lifecycle:lifecycle-livedata-ktx:$viewmodelKtx"
         ]
 
         testing = [

@@ -34,17 +34,16 @@ class PhotoDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.photoDetailsLiveData.observe(viewLifecycleOwner, Observer { uiState ->
-            when (uiState) {
-                is UIState.OnOperationSuccess ->
-                    binding.photoDetails = uiState.output
-                is UIState.OnOperationFailed ->
-                    showToast(uiState.throwable.message!!)
-            }
-        })
-
         arguments?.let {
             viewModel.processPhotoDetailsArgument(it)
-        }
+                .observe(viewLifecycleOwner, Observer { uiState ->
+                    when (uiState) {
+                        is UIState.OnOperationSuccess ->
+                            binding.photoDetails = uiState.output
+                        is UIState.OnOperationFailed ->
+                            showToast(uiState.throwable.message!!)
+                    }
+                })
+        } ?: showToast("Invalid data")
     }
 }
