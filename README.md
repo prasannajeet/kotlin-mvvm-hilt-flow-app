@@ -25,18 +25,17 @@ Navigation between the screens has been done using the Jetpack Navigation librar
 <img alt="Nav Graph" height="250px" src="https://raw.githubusercontent.com/prasannajeet/500px-clone-app/master/Navigation_Graph.png" />      
       
 ## Libraries The App uses libraries and tools used to build Modern Android application, mainly part of Android Jetpack 
-- [Kotlin](https://kotlinlang.org/) first        
-- [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)        
-- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)        
-- [Retrofit](https://square.github.io/retrofit/)        
-- [Moshi](https://github.com/square/moshi)        
-- [Picasso](https://square.github.io/picasso/)        
+- [Kotlin](https://kotlinlang.org/) first
+- [Coroutines Flow API](https://kotlinlang.org/docs/reference/coroutines/flow.html)
+- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
+- [Retrofit](https://square.github.io/retrofit/)
+- [Moshi](https://github.com/square/moshi)
+- [Picasso](https://square.github.io/picasso/)
 - [Hilt](https://dagger.dev/hilt/) for dependency injection
-- [Android KTX](https://developer.android.com/kotlin/ktx) features      
-- [MockK](https://mockk.io/) for unit testing  
+- [Android KTX](https://developer.android.com/kotlin/ktx) features
+- [MockK](https://mockk.io/) for unit testing
         
 ### Scope for Improvements        
- The app can be further improved with the addition of the following features        
-- Flow instead of Coroutines for API call results      
+ The app can be further improved with the addition of the following features           
 - Dynamic image sizes using multiple ViewHolders for different image sizes instead of current GridLayoutManager implementation  
 - Espresso Tests

@@ -1,6 +1,7 @@
 package com.prasan.a500pxcodingchallenge.domain
 
 import com.prasan.a500pxcodingchallenge.APICallResult
+import kotlinx.coroutines.flow.Flow
 
 /**
  * A UseCase defines a specific task performed in the app. For this project there would be two:
@@ -18,5 +19,5 @@ interface UseCase<in I : Any, out O : Any> {
      * @since 1.0
      * @return [O] model type used to define the UseCase class
      */
-    suspend fun execute(input: I): APICallResult<O>
+    suspend fun execute(input: I): Flow<APICallResult<O>>
 }

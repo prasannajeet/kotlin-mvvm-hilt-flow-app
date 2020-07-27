@@ -8,6 +8,7 @@ import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 
 /**
@@ -48,11 +49,16 @@ sealed class APICallResult<out T : Any> {
 suspend fun <T : Any> safeApiCall(
     messageInCaseOfError: String = "Network IO error",
     apiCall: NetworkCall<T>
-): APICallResult<T> {
-    val response = apiCall()
-    if (response.isSuccessful) return APICallResult.OnSuccessResponse(response.body()!!)
-    return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result, Custom ERROR - $messageInCaseOfError"))
-}
+) =
+    flow {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            emit(APICallResult.OnSuccessResponse(response.body()!!))
+            return@flow
+        }
+        emit(APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result, Custom ERROR - $messageInCaseOfError")))
+    }
+
 
 /**
  * [ImageView] extension function adds the capability to loading image by directly specifying

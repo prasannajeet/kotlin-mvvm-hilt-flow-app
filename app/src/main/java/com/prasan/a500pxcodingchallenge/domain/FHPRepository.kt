@@ -1,8 +1,6 @@
 package com.prasan.a500pxcodingchallenge.domain
 
-import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.BuildConfig
-import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
 import com.prasan.a500pxcodingchallenge.model.network.FiveHundredPixelsAPI
 import com.prasan.a500pxcodingchallenge.safeApiCall
 import javax.inject.Inject
@@ -26,7 +24,7 @@ class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredP
      * into the db before returning the same
      * @param pageNumber Page number of the data called in a paginated data source
      */
-    suspend fun getPopularPhotos(pageNumber: Int): APICallResult<PhotoResponse> =
+    suspend fun getPopularPhotos(pageNumber: Int) =
         safeApiCall("Error Obtaining Photos") {
             retrofitClient.getPopularPhotos(
                 BuildConfig.API_KEY,
@@ -34,5 +32,4 @@ class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredP
                 pageNumber
             )
         }
-
 }
