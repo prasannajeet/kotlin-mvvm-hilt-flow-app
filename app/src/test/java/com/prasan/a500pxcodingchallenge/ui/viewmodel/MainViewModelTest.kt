@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verifyOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
@@ -24,14 +25,12 @@ import org.mockito.ArgumentMatchers.anyList
 class MainViewModelTest {
 
     // Set the main coroutines dispatcher for unit testing.
-    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = TestCoroutineRule()
 
     // Executes each task synchronously using Architecture Components.
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
-
 
     @RelaxedMockK
     private lateinit var uiStateObserver: Observer<UIState<List<Photo>>>
@@ -59,9 +58,9 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            coEvery { mockUseCase.execute(1) } returns APICallResult.OnSuccessResponse(
-                mockPhotoResponse
-            )
+            coEvery { mockUseCase.execute(1) } returns flow {
+                emit(APICallResult.OnSuccessResponse(mockPhotoResponse))
+            }
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.getPhotosNextPage()
@@ -80,9 +79,9 @@ class MainViewModelTest {
         runBlockingTest {
             every { mockException.message } returns "Test Exception"
 
-            coEvery { mockUseCase.execute(1) } returns APICallResult.OnErrorResponse(
-                mockException
-            )
+            coEvery { mockUseCase.execute(1) } returns flow {
+                emit(APICallResult.OnErrorResponse(mockException))
+            }
 
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
@@ -101,9 +100,9 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            coEvery { mockUseCase.execute(1) } returns APICallResult.OnSuccessResponse(
-                mockPhotoResponse
-            )
+            coEvery { mockUseCase.execute(1) } returns flow {
+                emit(APICallResult.OnSuccessResponse(mockPhotoResponse))
+            }
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.onRecyclerViewScrolledToBottom()
@@ -123,9 +122,9 @@ class MainViewModelTest {
 
             every { mockException.message } returns "Test Exception"
 
-            coEvery { mockUseCase.execute(1) } returns APICallResult.OnErrorResponse(
-                mockException
-            )
+            coEvery { mockUseCase.execute(1) } returns flow {
+                emit(APICallResult.OnErrorResponse(mockException))
+            }
 
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)

@@ -12,6 +12,8 @@ import com.prasan.a500pxcodingchallenge.domain.GetPopularPhotosUseCase
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
  * @author Prasan
  * @since 1.0
  */
+@ExperimentalCoroutinesApi
 class MainViewModel @ViewModelInject constructor(
     private val getPopularPhotosUseCase: GetPopularPhotosUseCase
 ) : ViewModel() {
@@ -76,17 +79,22 @@ class MainViewModel @ViewModelInject constructor(
             viewModelScope.launch(exceptionHandler) {
 
                 popularPhotosLiveData.value = UIState.LoadingState(true)
-                when (val result = getPopularPhotosUseCase.execute(currentPageNumber)) {
-                    is APICallResult.OnErrorResponse ->
-                        popularPhotosLiveData.value = UIState.OnOperationFailed(result.exception)
-                    is APICallResult.OnSuccessResponse -> {
-                        currentPageNumber++
-                        maximumPageNumber = result.data.totalPages
-                        photoList.addAll(result.data.photos)
-                        popularPhotosLiveData.value =
-                            UIState.OnOperationSuccess(photoList)
+
+                getPopularPhotosUseCase.execute(currentPageNumber)
+                    .collect {
+                        when (it) {
+                            is APICallResult.OnErrorResponse ->
+                                popularPhotosLiveData.value =
+                                    UIState.OnOperationFailed(it.exception)
+                            is APICallResult.OnSuccessResponse -> {
+                                currentPageNumber++
+                                maximumPageNumber = it.data.totalPages
+                                photoList.addAll(it.data.photos)
+                                popularPhotosLiveData.value =
+                                    UIState.OnOperationSuccess(photoList)
+                            }
+                        }
                     }
-                }
                 popularPhotosLiveData.value = UIState.LoadingState(false)
             }
         }

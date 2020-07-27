@@ -2,6 +2,8 @@ package com.prasan.a500pxcodingchallenge.domain
 
 import com.prasan.a500pxcodingchallenge.APICallResult
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoResponse
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 class GetPopularPhotosUseCase @Inject constructor(private val repository: IRepository) :
     UseCase<Int, PhotoResponse> {
 
-    override suspend fun execute(input: Int): APICallResult<PhotoResponse> =
+    @ExperimentalCoroutinesApi
+    override suspend fun execute(input: Int): Flow<APICallResult<PhotoResponse>> =
         (repository as FHPRepository).getPopularPhotos(input)
 }

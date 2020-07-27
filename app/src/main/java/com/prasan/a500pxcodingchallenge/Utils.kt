@@ -8,7 +8,15 @@ import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import com.prasan.a500pxcodingchallenge.model.datamodel.Photo
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.retryWhen
 import retrofit2.Response
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 /**
  * Readable naming convention for Network call lambda
@@ -45,14 +53,28 @@ sealed class APICallResult<out T : Any> {
  * object wrapping an [Exception] class stating the error
  * @since 1.0
  */
+@ExperimentalCoroutinesApi
 suspend fun <T : Any> safeApiCall(
     messageInCaseOfError: String = "Network IO error",
     apiCall: NetworkCall<T>
-): APICallResult<T> {
-    val response = apiCall()
-    if (response.isSuccessful) return APICallResult.OnSuccessResponse(response.body()!!)
-    return APICallResult.OnErrorResponse(Exception("Error Occurred during getting safe Api result, Custom ERROR - $messageInCaseOfError"))
-}
+) =
+    flow {
+        val response = apiCall()
+        if (response.isSuccessful) {
+            response.body()?.let {
+                emit(APICallResult.OnSuccessResponse(it))
+            }
+                ?: emit(APICallResult.OnErrorResponse(IllegalArgumentException("API call successful but empty response body")))
+            return@flow
+        }
+        emit(APICallResult.OnErrorResponse(IOException("API call failed with error - $messageInCaseOfError")))
+    }.catch { e ->
+        emit(APICallResult.OnErrorResponse(IOException("Exception during network API call: ${e.message}")))
+    }.retryWhen { cause, attempt ->
+        if (attempt < 3 || cause is SocketTimeoutException) return@retryWhen true
+        return@retryWhen false
+    }.flowOn(Dispatchers.IO)
+
 
 /**
  * [ImageView] extension function adds the capability to loading image by directly specifying
