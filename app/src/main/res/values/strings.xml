@@ -8,5 +8,6 @@
     <string name="photo_details_label_impressions">Viewed:</string>
     <string name="photo_details_label_title">Title:</string>
     <string name="photo_details_label_exif">EXIF:</string>
+    <string name="photo_details_label_posted">Posted:</string>
     <string name="photo_details_label_photographer">Photographer:</string>
 </resources>

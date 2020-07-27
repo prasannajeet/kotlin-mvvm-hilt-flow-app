@@ -17,6 +17,10 @@ import kotlinx.coroutines.flow.retryWhen
 import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Readable naming convention for Network call lambda
@@ -159,6 +163,43 @@ fun Photo.getFormattedExifData() = StringBuilder().apply {
     append(if (iso != null && iso.isBlank()) "ISO0" else "ISO$iso")
 }.run {
     toString()
+}
+
+/**
+ * Returns how long back does the created at date of the [Photo] object go
+ * @since 1.0
+ */
+fun Photo.howLongBack(): String {
+
+    val timeCreatedAt =
+        OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME).toLocalDateTime()
+    val duration = Duration.between(timeCreatedAt, LocalDateTime.now())
+
+    return when {
+        duration.toDays() == 1L -> {
+            "${duration.toDays()} year"
+        }
+        duration.toDays() > 1 -> {
+            "${duration.toDays()} years"
+        }
+        duration.toHours() == 1L -> {
+            "${duration.toHours()} hour"
+        }
+        duration.toHours() > 1 -> {
+            "${duration.toHours()} hours"
+        }
+        duration.toMinutes() == 1L -> {
+            "${duration.toDays()} minute"
+        }
+        duration.toMinutes() > 1 -> {
+            "${duration.toDays()} minutes"
+        }
+        else -> {
+            "Less than a minute"
+        }
+    }.run {
+        "$this ago"
+    }
 }
 
 const val baseURL = "https://api.500px.com/"

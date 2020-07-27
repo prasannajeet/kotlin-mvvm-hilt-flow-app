@@ -9,14 +9,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.prasan.a500pxcodingchallenge.PhotoItemClickListener
-import com.prasan.a500pxcodingchallenge.UIState
+import com.prasan.a500pxcodingchallenge.*
 import com.prasan.a500pxcodingchallenge.databinding.PopularPhotosFragmentBinding
-import com.prasan.a500pxcodingchallenge.getFormattedExifData
 import com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails
-import com.prasan.a500pxcodingchallenge.showToast
 import com.prasan.a500pxcodingchallenge.ui.PopularPhotosAdapter
 import com.prasan.a500pxcodingchallenge.ui.viewmodel.MainViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 /**
  * This [Fragment] displays a list of popular photos from 500px in a paginated fashion, the next page of data
@@ -41,7 +39,8 @@ class PopularPhotosFragment : Fragment() {
             it.name,
             it.user?.fullname,
             it.user?.avatars?.default?.https,
-            it.getFormattedExifData()
+            it.getFormattedExifData(),
+            it.howLongBack()
         )
         findNavController()
             .navigate(
@@ -61,6 +60,7 @@ class PopularPhotosFragment : Fragment() {
     }
 
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

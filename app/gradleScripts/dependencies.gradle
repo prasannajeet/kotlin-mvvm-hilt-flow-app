@@ -23,6 +23,7 @@ ext {
         mockkVersion = "1.10.0"
         coroutineTest = "1.3.7"
         androidCoreTest = "2.1.0"
+        desugaringVersion = "1.0.9"
 
         kotlinDependencies = [
                 kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
@@ -68,6 +69,7 @@ ext {
         ]
 
         utilLibs = [
-                circleImageView: "de.hdodenhof:circleimageview:$circleImageViewVersion"
+                circleImageView: "de.hdodenhof:circleimageview:$circleImageViewVersion",
+                coreDesugaring: "com.android.tools:desugar_jdk_libs:$desugaringVersion"
         ]
 }
