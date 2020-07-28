@@ -6,8 +6,6 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.Photo
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
@@ -208,33 +206,4 @@ fun Photo.howLongBack(): String {
     }.run {
         "$this ago"
     }
-}
-
-/**
- * Maps a network call [Flow] response instance of [APICallResult] type to a [LiveData] of [UIState] type
- * to help ViewModels easily consume the result of a use-case execution
- * @since 1.0
- */
-@ExperimentalCoroutinesApi
-suspend fun <T : Any> Flow<APICallResult<T>>.mapToUIStateLiveData(): LiveData<UIState<T>> {
-    lateinit var flowAsLiveData: LiveData<UIState<T>>
-    this.collect {
-        flowAsLiveData = flow {
-            when (it) {
-                is APICallResult.OnErrorResponse -> {
-                    emit(UIState.OnOperationFailed(it.exception))
-                }
-                is APICallResult.OnSuccessResponse -> {
-                    emit(UIState.OnOperationSuccess(it.data))
-                }
-            }
-        }.onStart {
-            emit(UIState.LoadingState(true))
-        }.onCompletion {
-            emit(UIState.LoadingState(false))
-        }.catch { e ->
-            emit(UIState.OnOperationFailed(e))
-        }.flowOn(Dispatchers.Main).asLiveData()
-    }
-    return flowAsLiveData
 }
