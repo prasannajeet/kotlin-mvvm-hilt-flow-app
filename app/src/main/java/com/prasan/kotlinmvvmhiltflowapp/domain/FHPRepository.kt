@@ -2,7 +2,7 @@ package com.prasan.kotlinmvvmhiltflowapp.domain
 
 import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
 import com.prasan.kotlinmvvmhiltflowapp.model.network.FiveHundredPixelsAPI
-import com.prasan.kotlinmvvmhiltflowapp.safeApiCall
+import com.prasan.kotlinmvvmhiltflowapp.performSafeNetworkApiCall
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,7 +27,7 @@ class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredP
      */
     @ExperimentalCoroutinesApi
     suspend fun getPopularPhotos(pageNumber: Int) =
-        safeApiCall("Error Obtaining Photos") {
+        performSafeNetworkApiCall("Error Obtaining Photos") {
             retrofitClient.getPopularPhotos(
                 BuildConfig.API_KEY,
                 "popular",

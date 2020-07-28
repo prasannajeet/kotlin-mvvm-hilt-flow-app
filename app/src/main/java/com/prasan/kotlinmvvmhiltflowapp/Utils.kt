@@ -10,13 +10,10 @@ import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.Photo
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import retrofit2.Response
 import java.io.IOException
-import java.net.SocketTimeoutException
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -29,7 +26,7 @@ import java.time.format.DateTimeFormatter
 typealias NetworkCall<T> = suspend () -> Response<T>
 
 /**
- * Typealias for lambda passed when a photo is tapped on in Popular Photos Fragment
+ * typealias for lambda passed when a photo is tapped on in Popular Photos Fragment
  */
 typealias PhotoItemClickListener = (Photo) -> Unit
 
@@ -58,26 +55,35 @@ sealed class APICallResult<out T : Any> {
  * @since 1.0
  */
 @ExperimentalCoroutinesApi
-suspend fun <T : Any> safeApiCall(
-    messageInCaseOfError: String = "Network IO error",
+suspend fun <T : Any> performSafeNetworkApiCall(
+    messageInCaseOfError: String = "Network error",
+    allowRetries: Boolean = true,
+    numberOfRetries: Int = 2,
     apiCall: NetworkCall<T>
-) =
-    flow {
+): Flow<APICallResult<T>> {
+    var delayDuration = 1000L
+    val delayFactor = 2
+    return flow {
         val response = apiCall()
         if (response.isSuccessful) {
             response.body()?.let {
                 emit(APICallResult.OnSuccessResponse(it))
             }
-                ?: emit(APICallResult.OnErrorResponse(IllegalArgumentException("API call successful but empty response body")))
+                ?: emit(APICallResult.OnErrorResponse(IOException("API call successful but empty response body")))
             return@flow
         }
         emit(APICallResult.OnErrorResponse(IOException("API call failed with error - $messageInCaseOfError")))
+        return@flow
     }.catch { e ->
         emit(APICallResult.OnErrorResponse(IOException("Exception during network API call: ${e.message}")))
+        return@catch
     }.retryWhen { cause, attempt ->
-        if (attempt < 3 || cause is SocketTimeoutException) return@retryWhen true
-        return@retryWhen false
+        if (!allowRetries || attempt > numberOfRetries || cause !is IOException) return@retryWhen false
+        delay(delayDuration)
+        delayDuration *= delayFactor
+        return@retryWhen true
     }.flowOn(Dispatchers.IO)
+}
 
 
 /**
