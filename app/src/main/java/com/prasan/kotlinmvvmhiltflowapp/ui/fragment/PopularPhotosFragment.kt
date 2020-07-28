@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.prasan.kotlinmvvmhiltflowapp.*
 import com.prasan.kotlinmvvmhiltflowapp.databinding.PopularPhotosFragmentBinding
+import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.PhotoDetails
 import com.prasan.kotlinmvvmhiltflowapp.ui.PopularPhotosAdapter
 import com.prasan.kotlinmvvmhiltflowapp.ui.viewmodel.MainViewModel
@@ -28,7 +29,7 @@ class PopularPhotosFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: PopularPhotosFragmentBinding
-    private val photoItemClickListener: PhotoItemClickListener = {
+    private val photoItemClickListener: ListViewItemClickListener<Photo> = {
         val photoDetails = PhotoDetails(
             it.images[0].httpsUrl,
             it.description,

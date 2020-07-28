@@ -1,6 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.di
 
-import com.prasan.kotlinmvvmhiltflowapp.baseURL
+import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
 import com.prasan.kotlinmvvmhiltflowapp.domain.FHPRepository
 import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
 import com.prasan.kotlinmvvmhiltflowapp.domain.IRepository
@@ -49,7 +49,7 @@ object HiltDependenciesModule {
         moshiConverterFactory: MoshiConverterFactory
     ): FiveHundredPixelsAPI =
         Retrofit.Builder().run {
-            baseUrl(baseURL)
+            baseUrl(BuildConfig.BASE_URL)
             addConverterFactory(moshiConverterFactory)
             client(client)
             build()

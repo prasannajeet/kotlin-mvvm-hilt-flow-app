@@ -33,6 +33,7 @@ android {
         debug {
             //buildConfigField("String", "API_KEY","\"${myConfigProperties['apiKey']}\"")
             buildConfigField("String", "API_KEY","\"\"")
+            buildConfigField("String", "BASE_URL","\"https://api.500px.com/\"")
         }
     }
 

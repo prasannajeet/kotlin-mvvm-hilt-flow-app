@@ -3,7 +3,7 @@ package com.prasan.kotlinmvvmhiltflowapp.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.prasan.kotlinmvvmhiltflowapp.PhotoItemClickListener
+import com.prasan.kotlinmvvmhiltflowapp.ListViewItemClickListener
 import com.prasan.kotlinmvvmhiltflowapp.databinding.PopularPhotosItemBinding
 import com.prasan.kotlinmvvmhiltflowapp.loadUrl
 import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.Photo
@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
  *
  */
 class PopularPhotosAdapter(
-    private val itemClickListener: PhotoItemClickListener
+    private val itemClickListener: ListViewItemClickListener<Photo>
 ) :
     RecyclerView.Adapter<PopularPhotosAdapter.PopularPhotosViewHolder>() {
 
