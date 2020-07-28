@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">500px Clone App</string>
+    <string name="app_name">Kotlin MVVM Hilt Flow App</string>
     <string name="photo_from_popular_section">Photo from popular section</string>
     <string name="photo_details_label_description">Description:</string>
     <string name="photo_details_label_likes">Likes:</string>

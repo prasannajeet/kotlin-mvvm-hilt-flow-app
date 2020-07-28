@@ -6,16 +6,16 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply from: 'gradleScripts/dependencies.gradle'
 
-def myConfigPropertiesFile = rootProject.file("config")
-def myConfigProperties = new Properties()
-myConfigProperties.load(new FileInputStream(myConfigPropertiesFile))
+//def myConfigPropertiesFile = rootProject.file("config")
+//def myConfigProperties = new Properties()
+//myConfigProperties.load(new FileInputStream(myConfigPropertiesFile))
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.prasan.a500pxcodingchallenge"
+        applicationId "com.prasan.kotlinmvvmhiltflowapp"
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
@@ -31,7 +31,8 @@ android {
         }
 
         debug {
-            buildConfigField("String", "API_KEY","\"${myConfigProperties['apiKey']}\"")
+            //buildConfigField("String", "API_KEY","\"${myConfigProperties['apiKey']}\"")
+            buildConfigField("String", "API_KEY","\"\"")
         }
     }
 

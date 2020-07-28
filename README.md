@@ -6,10 +6,7 @@ This application is a simple implementation of the popular images feature of 500
 - Using MVVM Pattern as per Google's recommendation      
 - Android Architecture Components (LiveData, ViewModel, Navigation)        
 - Kotlin features (Lambdas, Extension functions, typealias, sealed class and Coroutines)        
-      
-## API Key 
-In order to use the app, you would need to create a file called "config" your project root folder and in it add your 500px API key using the string "apiKey={your API key}". Then go back to the project and force a gradle sync. The file is part of the .gitignore of the project in order to prevent any accidental commit.      
-      
+    
 ## App Overview      
  The app features a 2 screen navigation      
       

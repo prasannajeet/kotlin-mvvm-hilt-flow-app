@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/popular_photos_fragment"
-        android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PopularPhotosFragment"
+        android:name="com.prasan.kotlinmvvmhiltflowapp.ui.fragment.PopularPhotosFragment"
         android:label="Popular Photos"
         tools:layout="@layout/popular_photos_fragment">
         <action
@@ -15,13 +15,13 @@
             app:destination="@id/photo_details_fragment">
             <argument
                 android:name="photoDetails"
-                app:argType="com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails" />
+                app:argType="com.prasan.kotlinmvvmhiltflowapp.model.datamodel.PhotoDetails" />
         </action>
     </fragment>
 
     <fragment
         android:id="@+id/photo_details_fragment"
-        android:name="com.prasan.a500pxcodingchallenge.ui.fragment.PhotoDetailsFragment"
+        android:name="com.prasan.kotlinmvvmhiltflowapp.ui.fragment.PhotoDetailsFragment"
         android:label="Photo Details"
         tools:layout="@layout/fragment_photo_details">
         <action

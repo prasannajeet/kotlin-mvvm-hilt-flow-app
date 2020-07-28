@@ -5,7 +5,7 @@
 
         <variable
             name="photoDetails"
-            type="com.prasan.a500pxcodingchallenge.model.datamodel.PhotoDetails" />
+            type="com.prasan.kotlinmvvmhiltflowapp.model.datamodel.PhotoDetails" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
