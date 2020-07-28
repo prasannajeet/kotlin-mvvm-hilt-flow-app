@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.prasan.kotlinmvvmhiltflowapp.ListViewItemClickListener
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.databinding.PopularPhotosItemBinding
+import com.prasan.kotlinmvvmhiltflowapp.loadUrl
 import kotlin.properties.Delegates
 
 /**

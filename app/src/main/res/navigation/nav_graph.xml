@@ -15,7 +15,7 @@
             app:destination="@id/photo_details_fragment">
             <argument
                 android:name="photoDetails"
-                app:argType="com.prasan.kotlinmvvmhiltflowapp.model.datamodel.PhotoDetails" />
+                app:argType="com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoDetails" />
         </action>
     </fragment>
 
