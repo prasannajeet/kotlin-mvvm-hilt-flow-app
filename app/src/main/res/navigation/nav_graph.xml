@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/popular_photos_fragment"
-        android:name="com.prasan.kotlinmvvmhiltflowapp.ui.fragment.PopularPhotosFragment"
+        android:name="com.prasan.kotlinmvvmhiltflowapp.presentation.fragment.PopularPhotosFragment"
         android:label="Popular Photos"
         tools:layout="@layout/popular_photos_fragment">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/photo_details_fragment"
-        android:name="com.prasan.kotlinmvvmhiltflowapp.ui.fragment.PhotoDetailsFragment"
+        android:name="com.prasan.kotlinmvvmhiltflowapp.presentation.fragment.PhotoDetailsFragment"
         android:label="Photo Details"
         tools:layout="@layout/fragment_photo_details">
         <action

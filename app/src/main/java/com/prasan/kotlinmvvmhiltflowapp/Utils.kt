@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
-import com.prasan.kotlinmvvmhiltflowapp.model.datamodel.Photo
+import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,10 +1,10 @@
 package com.prasan.kotlinmvvmhiltflowapp.di
 
 import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
-import com.prasan.kotlinmvvmhiltflowapp.domain.FHPRepository
-import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
-import com.prasan.kotlinmvvmhiltflowapp.domain.IRepository
-import com.prasan.kotlinmvvmhiltflowapp.model.network.FiveHundredPixelsAPI
+import com.prasan.kotlinmvvmhiltflowapp.data.FHPRepository
+import com.prasan.kotlinmvvmhiltflowapp.data.network.FiveHundredPixelsAPI
+import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
+import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,7 +63,8 @@ object HiltDependenciesModule {
      * @since 1.0.0
      */
     @Provides
-    fun provideRepository(retrofit: FiveHundredPixelsAPI): IRepository = FHPRepository(retrofit)
+    fun provideRepository(retrofit: FiveHundredPixelsAPI): IRepository =
+        FHPRepository(retrofit)
 
     /**
      * Returns a [GetPopularPhotosUseCase] instance
@@ -72,5 +73,7 @@ object HiltDependenciesModule {
      */
     @Provides
     fun provideUseCase(repository: IRepository): GetPopularPhotosUseCase =
-        GetPopularPhotosUseCase(repository)
+        GetPopularPhotosUseCase(
+            repository
+        )
 }
