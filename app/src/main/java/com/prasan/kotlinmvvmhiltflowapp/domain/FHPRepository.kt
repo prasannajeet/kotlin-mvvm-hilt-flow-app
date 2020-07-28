@@ -15,7 +15,6 @@ import javax.inject.Singleton
  * @since 1.0
  */
 @Singleton
-@ExperimentalCoroutinesApi
 class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredPixelsAPI) :
     IRepository {
 
@@ -26,6 +25,7 @@ class FHPRepository @Inject constructor(private val retrofitClient: FiveHundredP
      * into the db before returning the same
      * @param pageNumber Page number of the data called in a paginated data source
      */
+    @ExperimentalCoroutinesApi
     suspend fun getPopularPhotos(pageNumber: Int) =
         safeApiCall("Error Obtaining Photos") {
             retrofitClient.getPopularPhotos(

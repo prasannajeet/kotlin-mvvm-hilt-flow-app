@@ -9,7 +9,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -63,7 +62,6 @@ object HiltDependenciesModule {
      * @param retrofit [FiveHundredPixelsAPI] instance
      * @since 1.0.0
      */
-    @ExperimentalCoroutinesApi
     @Provides
     fun provideRepository(retrofit: FiveHundredPixelsAPI): IRepository = FHPRepository(retrofit)
 
