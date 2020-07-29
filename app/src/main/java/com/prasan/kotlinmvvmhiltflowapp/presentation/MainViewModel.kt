@@ -7,12 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.prasan.kotlinmvvmhiltflowapp.APICallResult
 import com.prasan.kotlinmvvmhiltflowapp.UIState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoDetails
 import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -38,13 +36,6 @@ class MainViewModel @ViewModelInject constructor(
         MutableLiveData<UIState<List<Photo>>>()
     }
 
-    private val exceptionHandler: CoroutineExceptionHandler by lazy {
-        CoroutineExceptionHandler { _, throwable ->
-            popularPhotosLiveData.value = UIState.LoadingState(false)
-            popularPhotosLiveData.value = UIState.OnOperationFailed(throwable)
-        }
-    }
-
     private var currentPageNumber = 1 // Page number currently displayed in UI
     private var maximumPageNumber = 2 // Total number of pages available in the paginated service
     private val photoList =
@@ -68,29 +59,21 @@ class MainViewModel @ViewModelInject constructor(
             return
         }
 
-
         if (currentPageNumber < maximumPageNumber) {
-
-            viewModelScope.launch(exceptionHandler) {
-
-                popularPhotosLiveData.value = UIState.LoadingState(true)
-
+            viewModelScope.launch() {
                 getPopularPhotosUseCase.execute(currentPageNumber)
                     .collect {
                         when (it) {
-                            is APICallResult.OnErrorResponse ->
-                                popularPhotosLiveData.value =
-                                    UIState.OnOperationFailed(it.exception)
-                            is APICallResult.OnSuccessResponse -> {
+                            is UIState.LoadingState -> popularPhotosLiveData.value = it
+                            is UIState.OnOperationFailed -> popularPhotosLiveData.value = it
+                            is UIState.OnOperationSuccess -> {
                                 currentPageNumber++
-                                maximumPageNumber = it.data.totalPages
-                                photoList.addAll(it.data.photos)
-                                popularPhotosLiveData.value =
-                                    UIState.OnOperationSuccess(photoList)
+                                maximumPageNumber = it.output.totalPages
+                                photoList.addAll(it.output.photos)
+                                popularPhotosLiveData.value = UIState.OnOperationSuccess(photoList)
                             }
                         }
                     }
-                popularPhotosLiveData.value = UIState.LoadingState(false)
             }
         }
     }

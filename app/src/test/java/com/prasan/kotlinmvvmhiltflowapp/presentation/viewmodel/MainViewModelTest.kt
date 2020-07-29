@@ -2,7 +2,6 @@ package com.prasan.kotlinmvvmhiltflowapp.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.prasan.kotlinmvvmhiltflowapp.APICallResult
 import com.prasan.kotlinmvvmhiltflowapp.TestCoroutineRule
 import com.prasan.kotlinmvvmhiltflowapp.UIState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
@@ -33,6 +32,18 @@ class MainViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    private val fakeSuccessFlow = flow {
+        emit(UIState.LoadingState(true))
+        emit(UIState.OnOperationSuccess(mockPhotoResponse))
+        emit(UIState.LoadingState(false))
+    }
+
+    private val fakeFailureFlow = flow {
+        emit(UIState.LoadingState(true))
+        emit(UIState.OnOperationFailed(mockException))
+        emit(UIState.LoadingState(false))
+    }
+
     @RelaxedMockK
     private lateinit var uiStateObserver: Observer<UIState<List<Photo>>>
 
@@ -52,6 +63,7 @@ class MainViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+        every { mockException.message } returns "Test Exception"
     }
 
     @Test
@@ -59,9 +71,7 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            coEvery { mockUseCase.execute(1) } returns flow {
-                emit(APICallResult.OnSuccessResponse(mockPhotoResponse))
-            }
+            coEvery { mockUseCase.execute(1) } returns fakeSuccessFlow
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.getPhotosNextPage()
@@ -78,12 +88,8 @@ class MainViewModelTest {
     fun `when load photos service throws error UIState is OnOperationError`() {
 
         runBlockingTest {
-            every { mockException.message } returns "Test Exception"
 
-            coEvery { mockUseCase.execute(1) } returns flow {
-                emit(APICallResult.OnErrorResponse(mockException))
-            }
-
+            coEvery { mockUseCase.execute(1) } returns fakeFailureFlow
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.getPhotosNextPage()
@@ -101,9 +107,7 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            coEvery { mockUseCase.execute(1) } returns flow {
-                emit(APICallResult.OnSuccessResponse(mockPhotoResponse))
-            }
+            coEvery { mockUseCase.execute(1) } returns fakeSuccessFlow
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.onRecyclerViewScrolledToBottom()
@@ -121,12 +125,7 @@ class MainViewModelTest {
 
         runBlockingTest {
 
-            every { mockException.message } returns "Test Exception"
-
-            coEvery { mockUseCase.execute(1) } returns flow {
-                emit(APICallResult.OnErrorResponse(mockException))
-            }
-
+            coEvery { mockUseCase.execute(1) } returns fakeFailureFlow
 
             viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
             viewModel.onRecyclerViewScrolledToBottom()
