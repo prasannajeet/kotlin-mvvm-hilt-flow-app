@@ -48,7 +48,7 @@ sealed class NetworkOperationResult<out DTO : Any> {
  * instance or an error message wrapped in an [Exception] class
  * @param messageInCaseOfError Custom error message to wrap around [NetworkOperationResult.OnFailed]
  * with a default value provided for flexibility
- * @param apiCall lambda representing a suspend function for the Retrofit API call
+ * @param networkApiCall lambda representing a suspend function for the Retrofit API call
  * @return [NetworkOperationResult.OnSuccess] object of type [T], where [T] is the success object wrapped around
  * [NetworkOperationResult.OnSuccess] if network call is executed successfully, or [NetworkOperationResult.OnFailed]
  * object wrapping an [Exception] class stating the error
@@ -59,12 +59,12 @@ suspend fun <T : Any> performSafeNetworkApiCall(
     messageInCaseOfError: String = "Network error",
     allowRetries: Boolean = true,
     numberOfRetries: Int = 2,
-    apiCall: NetworkAPIInvoke<T>
+    networkApiCall: NetworkAPIInvoke<T>
 ): Flow<NetworkOperationResult<T>> {
     var delayDuration = 1000L
     val delayFactor = 2
     return flow {
-        val response = apiCall()
+        val response = networkApiCall()
         if (response.isSuccessful) {
             response.body()?.let {
                 emit(NetworkOperationResult.OnSuccess(it))

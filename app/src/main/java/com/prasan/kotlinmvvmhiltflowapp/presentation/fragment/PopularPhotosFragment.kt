@@ -63,27 +63,31 @@ class PopularPhotosFragment : Fragment() {
 
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
+        super.onViewCreated(view, savedInstanceState)
         binding.popularPhotoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
 
+                super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     viewModel.onRecyclerViewScrolledToBottom()
                 }
             }
         })
 
-        viewModel.popularPhotosLiveData.observe(viewLifecycleOwner, Observer { uiState ->
-            when (uiState) {
+        viewModel.popularPhotosLiveData.observe(viewLifecycleOwner, Observer { viewState ->
+            when (viewState) {
+
                 is ViewState.Loading ->
-                    binding.loading.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
+                    binding.loading.visibility =
+                        if (viewState.isLoading) View.VISIBLE else View.GONE
+
                 is ViewState.RenderFailure ->
-                    uiState.throwable.message?.let { toastMessage ->
+                    viewState.throwable.message?.let { toastMessage ->
                         context?.showToast(toastMessage)
                     }
+
                 is ViewState.RenderSuccess -> {
 
                     if (binding.popularPhotoList.adapter == null) {
@@ -93,11 +97,10 @@ class PopularPhotosFragment : Fragment() {
                     }
 
                     (binding.popularPhotoList.adapter as PopularPhotosAdapter).itemList =
-                        uiState.output
+                        viewState.output
                 }
             }
         })
-
         viewModel.getPhotosNextPage()
     }
 }

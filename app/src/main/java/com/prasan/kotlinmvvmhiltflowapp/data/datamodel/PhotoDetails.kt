@@ -14,7 +14,7 @@ data class PhotoDetails(
     val userName: String?,
     val userPhotoUrl: String?,
     val exif: String?,
-    val howLong: String?
+    val durationPosted: String?
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readString(),
@@ -43,7 +43,7 @@ data class PhotoDetails(
         writeString(userName)
         writeString(userPhotoUrl)
         writeString(exif)
-        writeString(howLong)
+        writeString(durationPosted)
     }
 
     companion object {
