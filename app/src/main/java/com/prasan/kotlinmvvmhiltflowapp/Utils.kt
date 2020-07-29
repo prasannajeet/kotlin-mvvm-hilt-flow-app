@@ -1,11 +1,11 @@
 package com.prasan.kotlinmvvmhiltflowapp
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.databinding.BindingAdapter
-import androidx.fragment.app.Fragment
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
@@ -23,34 +23,34 @@ import java.time.format.DateTimeFormatter
  * Readable naming convention for Network call lambda
  * @since 1.0
  */
-typealias NetworkCall<T> = suspend () -> Response<T>
+typealias NetworkAPIInvoke<T> = suspend () -> Response<T>
 
 /**
  * typealias for lambda passed when a photo is tapped on in Popular Photos Fragment
  */
-typealias ListViewItemClickListener<T> = (T) -> Unit
+typealias ListItemClickListener<T> = (T) -> Unit
 
 /**
  * Sealed class type-restricts the result of API calls to success and failure. The type
  * <T> represents the model class expected from the API call in case of a success
  * In case of success, the result will be wrapped around the OnSuccessResponse class
- * In case of error, the exception causing the error will be wrapped around OnErrorResponse class
+ * In case of error, the throwable causing the error will be wrapped around OnErrorResponse class
  * @author Prasan
  * @since 1.0
  */
-sealed class APICallResult<out T : Any> {
-    data class OnSuccessResponse<out T : Any>(val data: T) : APICallResult<T>()
-    data class OnErrorResponse(val exception: Exception) : APICallResult<Nothing>()
+sealed class NetworkOperationResult<out DTO : Any> {
+    data class OnSuccess<out DTO : Any>(val data: DTO) : NetworkOperationResult<DTO>()
+    data class OnFailed(val throwable: Throwable) : NetworkOperationResult<Nothing>()
 }
 
 /**
  * Utility function that works to perform a Retrofit API call and return either a success model
  * instance or an error message wrapped in an [Exception] class
- * @param messageInCaseOfError Custom error message to wrap around [APICallResult.OnErrorResponse]
+ * @param messageInCaseOfError Custom error message to wrap around [NetworkOperationResult.OnFailed]
  * with a default value provided for flexibility
  * @param apiCall lambda representing a suspend function for the Retrofit API call
- * @return [APICallResult.OnSuccessResponse] object of type [T], where [T] is the success object wrapped around
- * [APICallResult.OnSuccessResponse] if network call is executed successfully, or [APICallResult.OnErrorResponse]
+ * @return [NetworkOperationResult.OnSuccess] object of type [T], where [T] is the success object wrapped around
+ * [NetworkOperationResult.OnSuccess] if network call is executed successfully, or [NetworkOperationResult.OnFailed]
  * object wrapping an [Exception] class stating the error
  * @since 1.0
  */
@@ -59,23 +59,23 @@ suspend fun <T : Any> performSafeNetworkApiCall(
     messageInCaseOfError: String = "Network error",
     allowRetries: Boolean = true,
     numberOfRetries: Int = 2,
-    apiCall: NetworkCall<T>
-): Flow<APICallResult<T>> {
+    apiCall: NetworkAPIInvoke<T>
+): Flow<NetworkOperationResult<T>> {
     var delayDuration = 1000L
     val delayFactor = 2
     return flow {
         val response = apiCall()
         if (response.isSuccessful) {
             response.body()?.let {
-                emit(APICallResult.OnSuccessResponse(it))
+                emit(NetworkOperationResult.OnSuccess(it))
             }
-                ?: emit(APICallResult.OnErrorResponse(IOException("API call successful but empty response body")))
+                ?: emit(NetworkOperationResult.OnFailed(IOException("API call successful but empty response body")))
             return@flow
         }
-        emit(APICallResult.OnErrorResponse(IOException("API call failed with error - $messageInCaseOfError")))
+        emit(NetworkOperationResult.OnFailed(IOException("API call failed with error - $messageInCaseOfError")))
         return@flow
     }.catch { e ->
-        emit(APICallResult.OnErrorResponse(IOException("Exception during network API call: ${e.message}")))
+        emit(NetworkOperationResult.OnFailed(IOException("Exception during network API call: ${e.message}")))
         return@catch
     }.retryWhen { cause, attempt ->
         if (!allowRetries || attempt > numberOfRetries || cause !is IOException) return@retryWhen false
@@ -119,20 +119,20 @@ fun loadImage(view: ImageView, url: String) {
  * @author Prasan
  * @since 1.0
  */
-sealed class UIState<out T : Any> {
+sealed class ViewState<out T : Any> {
 
     /**
      * Represents UI state where the UI should be showing a loading UX to the user
      * @param isLoading will be true when the loading UX needs to display, false when not
      */
-    data class LoadingState(val isLoading: Boolean) : UIState<Nothing>()
+    data class Loading(val isLoading: Boolean) : ViewState<Nothing>()
 
     /**
      * Represents the UI state where the operation requested by the UI has been completed successfully
      * and the output of type [T] as asked by the UI has been provided to it
      * @param output result object of [T] type representing the fruit of the successful operation
      */
-    data class OnOperationSuccess<out T : Any>(val output: T) : UIState<T>()
+    data class RenderSuccess<out T : Any>(val output: T) : ViewState<T>()
 
     /**
      * Represents the UI state where the operation requested by the UI has failed to complete
@@ -140,14 +140,14 @@ sealed class UIState<out T : Any> {
      * to be shown the user
      * @param throwable [Throwable] instance containing the root cause of the failure in a [String]
      */
-    data class OnOperationFailed(val throwable: Throwable) : UIState<Nothing>()
+    data class RenderFailure(val throwable: Throwable) : ViewState<Nothing>()
 }
 
 /**
  * Extension function on a fragment to show a toast message
  */
-fun Fragment.showToast(@NonNull message: String) {
-    Toast.makeText(this.activity, message, Toast.LENGTH_SHORT).show()
+fun Context.showToast(@NonNull message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 /**
@@ -175,7 +175,7 @@ fun Photo.getFormattedExifData() = StringBuilder().apply {
  * Returns how long back does the created at date of the [Photo] object go
  * @since 1.0
  */
-fun Photo.howLongBack(): String {
+fun Photo.durationPosted(): String {
 
     val timeCreatedAt =
         OffsetDateTime.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME).toLocalDateTime()

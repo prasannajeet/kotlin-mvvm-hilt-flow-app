@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.prasan.kotlinmvvmhiltflowapp.UIState
+import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.databinding.FragmentPhotoDetailsBinding
 import com.prasan.kotlinmvvmhiltflowapp.presentation.MainViewModel
 import com.prasan.kotlinmvvmhiltflowapp.showToast
@@ -38,12 +38,12 @@ class PhotoDetailsFragment : Fragment() {
             viewModel.processPhotoDetailsArgument(it)
                 .observe(viewLifecycleOwner, Observer { uiState ->
                     when (uiState) {
-                        is UIState.OnOperationSuccess ->
+                        is ViewState.RenderSuccess ->
                             binding.photoDetails = uiState.output
-                        is UIState.OnOperationFailed ->
-                            showToast(uiState.throwable.message!!)
+                        is ViewState.RenderFailure ->
+                            context?.showToast(uiState.throwable.message!!)
                     }
                 })
-        } ?: showToast("Invalid data")
+        } ?: context?.showToast("Invalid data")
     }
 }

@@ -29,7 +29,7 @@ class PopularPhotosFragment : Fragment() {
 
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var binding: PopularPhotosFragmentBinding
-    private val photoItemClickListener: ListViewItemClickListener<Photo> = {
+    private val photoItemClickListener: ListItemClickListener<Photo> = {
         val photoDetails = PhotoDetails(
             it.images[0].httpsUrl,
             it.description,
@@ -41,7 +41,7 @@ class PopularPhotosFragment : Fragment() {
             it.user?.fullname,
             it.user?.avatars?.default?.https,
             it.getFormattedExifData(),
-            it.howLongBack()
+            it.durationPosted()
         )
         findNavController()
             .navigate(
@@ -78,13 +78,13 @@ class PopularPhotosFragment : Fragment() {
 
         viewModel.popularPhotosLiveData.observe(viewLifecycleOwner, Observer { uiState ->
             when (uiState) {
-                is UIState.LoadingState ->
+                is ViewState.Loading ->
                     binding.loading.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
-                is UIState.OnOperationFailed ->
+                is ViewState.RenderFailure ->
                     uiState.throwable.message?.let { toastMessage ->
-                        showToast(toastMessage)
+                        context?.showToast(toastMessage)
                     }
-                is UIState.OnOperationSuccess -> {
+                is ViewState.RenderSuccess -> {
 
                     if (binding.popularPhotoList.adapter == null) {
                         binding.popularPhotoList.adapter = PopularPhotosAdapter(

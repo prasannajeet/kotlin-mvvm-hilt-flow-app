@@ -3,7 +3,7 @@ package com.prasan.kotlinmvvmhiltflowapp.presentation.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.prasan.kotlinmvvmhiltflowapp.TestCoroutineRule
-import com.prasan.kotlinmvvmhiltflowapp.UIState
+import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
@@ -33,19 +33,19 @@ class MainViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     private val fakeSuccessFlow = flow {
-        emit(UIState.LoadingState(true))
-        emit(UIState.OnOperationSuccess(mockPhotoResponse))
-        emit(UIState.LoadingState(false))
+        emit(ViewState.Loading(true))
+        emit(ViewState.RenderSuccess(mockPhotoResponse))
+        emit(ViewState.Loading(false))
     }
 
     private val fakeFailureFlow = flow {
-        emit(UIState.LoadingState(true))
-        emit(UIState.OnOperationFailed(mockException))
-        emit(UIState.LoadingState(false))
+        emit(ViewState.Loading(true))
+        emit(ViewState.RenderFailure(mockException))
+        emit(ViewState.Loading(false))
     }
 
     @RelaxedMockK
-    private lateinit var uiStateObserver: Observer<UIState<List<Photo>>>
+    private lateinit var viewStateObserver: Observer<ViewState<List<Photo>>>
 
     @RelaxedMockK
     private lateinit var mockPhotoResponse: PhotoResponse
@@ -73,31 +73,31 @@ class MainViewModelTest {
 
             coEvery { mockUseCase.execute(1) } returns fakeSuccessFlow
 
-            viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
+            viewModel.popularPhotosLiveData.observeForever(viewStateObserver)
             viewModel.getPhotosNextPage()
 
             verifyOrder {
-                uiStateObserver.onChanged(UIState.LoadingState(true))
-                uiStateObserver.onChanged(UIState.OnOperationSuccess(anyList()))
-                uiStateObserver.onChanged(UIState.LoadingState(false))
+                viewStateObserver.onChanged(ViewState.Loading(true))
+                viewStateObserver.onChanged(ViewState.RenderSuccess(anyList()))
+                viewStateObserver.onChanged(ViewState.Loading(false))
             }
         }
     }
 
     @Test
-    fun `when load photos service throws error UIState is OnOperationError`() {
+    fun `when load photos service throws network failure then ViewState renders failure`() {
 
         runBlockingTest {
 
             coEvery { mockUseCase.execute(1) } returns fakeFailureFlow
 
-            viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
+            viewModel.popularPhotosLiveData.observeForever(viewStateObserver)
             viewModel.getPhotosNextPage()
 
             verifyOrder {
-                uiStateObserver.onChanged(UIState.LoadingState(true))
-                uiStateObserver.onChanged(UIState.OnOperationFailed(mockException))
-                uiStateObserver.onChanged(UIState.LoadingState(false))
+                viewStateObserver.onChanged(ViewState.Loading(true))
+                viewStateObserver.onChanged(ViewState.RenderFailure(mockException))
+                viewStateObserver.onChanged(ViewState.Loading(false))
             }
         }
     }
@@ -109,31 +109,31 @@ class MainViewModelTest {
 
             coEvery { mockUseCase.execute(1) } returns fakeSuccessFlow
 
-            viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
+            viewModel.popularPhotosLiveData.observeForever(viewStateObserver)
             viewModel.onRecyclerViewScrolledToBottom()
 
             verifyOrder {
-                uiStateObserver.onChanged(UIState.LoadingState(true))
-                uiStateObserver.onChanged(UIState.OnOperationSuccess(anyList()))
-                uiStateObserver.onChanged(UIState.LoadingState(false))
+                viewStateObserver.onChanged(ViewState.Loading(true))
+                viewStateObserver.onChanged(ViewState.RenderSuccess(anyList()))
+                viewStateObserver.onChanged(ViewState.Loading(false))
             }
         }
     }
 
     @Test
-    fun `when list scrolled to the bottom and error in service call error propagated in livedata`() {
+    fun `when list scrolled to the bottom and error in service call error propagated to view`() {
 
         runBlockingTest {
 
             coEvery { mockUseCase.execute(1) } returns fakeFailureFlow
 
-            viewModel.popularPhotosLiveData.observeForever(uiStateObserver)
+            viewModel.popularPhotosLiveData.observeForever(viewStateObserver)
             viewModel.onRecyclerViewScrolledToBottom()
 
             verifyOrder {
-                uiStateObserver.onChanged(UIState.LoadingState(true))
-                uiStateObserver.onChanged(UIState.OnOperationFailed(mockException))
-                uiStateObserver.onChanged(UIState.LoadingState(false))
+                viewStateObserver.onChanged(ViewState.Loading(true))
+                viewStateObserver.onChanged(ViewState.RenderFailure(mockException))
+                viewStateObserver.onChanged(ViewState.Loading(false))
             }
         }
     }

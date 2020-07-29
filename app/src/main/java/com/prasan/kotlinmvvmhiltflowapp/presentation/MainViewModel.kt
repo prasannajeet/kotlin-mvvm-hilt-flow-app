@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.prasan.kotlinmvvmhiltflowapp.UIState
+import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoDetails
 import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
@@ -32,8 +32,8 @@ class MainViewModel @ViewModelInject constructor(
     /**
      * [MutableLiveData] to notify the Popular photos list view with the list of photos
      */
-    val popularPhotosLiveData: MutableLiveData<UIState<List<Photo>>> by lazy {
-        MutableLiveData<UIState<List<Photo>>>()
+    val popularPhotosLiveData: MutableLiveData<ViewState<List<Photo>>> by lazy {
+        MutableLiveData<ViewState<List<Photo>>>()
     }
 
     private var currentPageNumber = 1 // Page number currently displayed in UI
@@ -55,7 +55,7 @@ class MainViewModel @ViewModelInject constructor(
     fun getPhotosNextPage() {
 
         if (navigatingFromDetails) {
-            popularPhotosLiveData.value = UIState.OnOperationSuccess(photoList)
+            popularPhotosLiveData.value = ViewState.RenderSuccess(photoList)
             return
         }
 
@@ -64,13 +64,13 @@ class MainViewModel @ViewModelInject constructor(
                 getPopularPhotosUseCase.execute(currentPageNumber)
                     .collect {
                         when (it) {
-                            is UIState.LoadingState -> popularPhotosLiveData.value = it
-                            is UIState.OnOperationFailed -> popularPhotosLiveData.value = it
-                            is UIState.OnOperationSuccess -> {
+                            is ViewState.Loading -> popularPhotosLiveData.value = it
+                            is ViewState.RenderFailure -> popularPhotosLiveData.value = it
+                            is ViewState.RenderSuccess -> {
                                 currentPageNumber++
                                 maximumPageNumber = it.output.totalPages
                                 photoList.addAll(it.output.photos)
-                                popularPhotosLiveData.value = UIState.OnOperationSuccess(photoList)
+                                popularPhotosLiveData.value = ViewState.RenderSuccess(photoList)
                             }
                         }
                     }
@@ -89,9 +89,9 @@ class MainViewModel @ViewModelInject constructor(
             val photoDetails = args.getParcelable<PhotoDetails>("photoDetails")
 
             photoDetails?.let {
-                emit(UIState.OnOperationSuccess(it))
+                emit(ViewState.RenderSuccess(it))
             } ?: run {
-                emit(UIState.OnOperationFailed(Exception("No Photo Details found")))
+                emit(ViewState.RenderFailure(Exception("No Photo Details found")))
 
             }
         }.asLiveData()
