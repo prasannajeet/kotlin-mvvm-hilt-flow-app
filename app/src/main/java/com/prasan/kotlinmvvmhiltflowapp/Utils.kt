@@ -72,7 +72,14 @@ suspend fun <T : Any> performSafeNetworkApiCall(
                 ?: emit(NetworkOperationResult.OnFailed(IOException("API call successful but empty response body")))
             return@flow
         }
-        emit(NetworkOperationResult.OnFailed(IOException("API call failed with error - $messageInCaseOfError")))
+        emit(
+            NetworkOperationResult.OnFailed(
+                IOException(
+                    "API call failed with error - ${response.errorBody()
+                        ?.string() ?: messageInCaseOfError}"
+                )
+            )
+        )
         return@flow
     }.catch { e ->
         emit(NetworkOperationResult.OnFailed(IOException("Exception during network API call: ${e.message}")))
