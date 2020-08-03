@@ -1,9 +1,12 @@
 package com.prasan.kotlinmvvmhiltflowapp.data.network
 
+import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
+import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
 import com.prasan.kotlinmvvmhiltflowapp.data.contract.IWebService
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
+import com.prasan.kotlinmvvmhiltflowapp.performSafeNetworkApiCall
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import retrofit2.Response
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,9 +24,14 @@ class RetrofitWebService @Inject constructor(private val retrofitClient: FiveHun
 
     @ExperimentalCoroutinesApi
     override suspend fun getPhotosByPage(
-        apiKey: String,
-        feature: String,
         pageNumber: Int
-    ): Response<PhotoResponse> =
-        retrofitClient.getPopularPhotos(apiKey, feature, pageNumber)
+    ): Flow<NetworkOperationResult<PhotoResponse>> =
+
+        performSafeNetworkApiCall("Error Obtaining Photos") {
+            retrofitClient.getPopularPhotos(
+                BuildConfig.API_KEY,
+                "popular",
+                pageNumber
+            )
+        }
 }
