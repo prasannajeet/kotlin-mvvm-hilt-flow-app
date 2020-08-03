@@ -4,7 +4,7 @@ import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
-import com.prasan.kotlinmvvmhiltflowapp.domain.contract.UseCase
+import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -15,14 +15,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * [UseCase] class implementation that retrieves a paginated list of photos from the service
+ * [IUseCase] class implementation that retrieves a paginated list of photos from the service
  * Takes a page number as input and returns the [PhotoResponse] instance in return
  * @author Prasan
  * @since 1.0
  */
 @Singleton
-class GetPopularPhotosUseCase @Inject constructor(private val repository: IRepository) :
-    UseCase<Int, PhotoResponse> {
+class GetPopularPhotosUseCase @Inject constructor(override val repository: IRepository) :
+    IUseCase<Int, PhotoResponse> {
 
     @ExperimentalCoroutinesApi
     override suspend fun execute(input: Int): Flow<ViewState<PhotoResponse>> = flow {

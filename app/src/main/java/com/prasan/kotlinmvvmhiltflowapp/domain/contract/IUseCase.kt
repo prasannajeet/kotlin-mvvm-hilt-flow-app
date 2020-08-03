@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.Flow
  * [O] type defines the output of the use-case execution
  * @author Prasan
  */
-interface UseCase<in I : Any, out O : Any> {
+interface IUseCase<in I : Any, out O : Any> {
+
+    val repository: IRepository
 
     /**
      * Execution contract which will run the business logic associated with completing a
