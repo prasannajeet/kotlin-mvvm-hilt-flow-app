@@ -1,14 +1,14 @@
 package com.prasan.kotlinmvvmhiltflowapp.di
 
 import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
+import com.prasan.kotlinmvvmhiltflowapp.contract.IRemoteDataSource
+import com.prasan.kotlinmvvmhiltflowapp.contract.IRepository
+import com.prasan.kotlinmvvmhiltflowapp.contract.IWebService
 import com.prasan.kotlinmvvmhiltflowapp.data.FHPRepository
 import com.prasan.kotlinmvvmhiltflowapp.data.NetworkDataSource
-import com.prasan.kotlinmvvmhiltflowapp.data.contract.IRemoteDataSource
-import com.prasan.kotlinmvvmhiltflowapp.data.contract.IWebService
 import com.prasan.kotlinmvvmhiltflowapp.data.network.FiveHundredPixelsAPI
 import com.prasan.kotlinmvvmhiltflowapp.data.network.RetrofitWebService
-import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
-import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
+import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

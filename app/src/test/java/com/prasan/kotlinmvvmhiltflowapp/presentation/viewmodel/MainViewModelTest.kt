@@ -6,7 +6,7 @@ import com.prasan.kotlinmvvmhiltflowapp.TestCoroutineRule
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
-import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
+import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
 import com.prasan.kotlinmvvmhiltflowapp.presentation.MainViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

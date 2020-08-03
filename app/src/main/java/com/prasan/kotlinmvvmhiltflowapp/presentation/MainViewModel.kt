@@ -10,7 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoDetails
-import com.prasan.kotlinmvvmhiltflowapp.domain.usecase.GetPopularPhotosUseCase
+import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
+import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -60,13 +61,13 @@ class MainViewModel @ViewModelInject constructor(
         }
 
         if (currentPageNumber < maximumPageNumber) {
-            viewModelScope.launch() {
+            viewModelScope.launch {
                 getPopularPhotosUseCase.execute(currentPageNumber)
                     .collect {
                         when (it) {
                             is ViewState.Loading -> popularPhotosLiveData.value = it
                             is ViewState.RenderFailure -> popularPhotosLiveData.value = it
-                            is ViewState.RenderSuccess -> {
+                            is ViewState.RenderSuccess<PhotoResponse> -> {
                                 currentPageNumber++
                                 maximumPageNumber = it.output.totalPages
                                 photoList.addAll(it.output.photos)

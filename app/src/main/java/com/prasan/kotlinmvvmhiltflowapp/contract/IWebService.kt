@@ -1,4 +1,4 @@
-package com.prasan.kotlinmvvmhiltflowapp.data.contract
+package com.prasan.kotlinmvvmhiltflowapp.contract
 
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse

@@ -2,7 +2,7 @@ package com.prasan.kotlinmvvmhiltflowapp.data.network
 
 import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
-import com.prasan.kotlinmvvmhiltflowapp.data.contract.IWebService
+import com.prasan.kotlinmvvmhiltflowapp.contract.IWebService
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import com.prasan.kotlinmvvmhiltflowapp.performSafeNetworkApiCall
 import kotlinx.coroutines.ExperimentalCoroutinesApi

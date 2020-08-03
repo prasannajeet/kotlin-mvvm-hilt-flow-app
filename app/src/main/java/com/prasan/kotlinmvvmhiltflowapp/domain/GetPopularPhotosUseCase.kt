@@ -1,10 +1,10 @@
-package com.prasan.kotlinmvvmhiltflowapp.domain.usecase
+package com.prasan.kotlinmvvmhiltflowapp.domain
 
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
+import com.prasan.kotlinmvvmhiltflowapp.contract.IRepository
+import com.prasan.kotlinmvvmhiltflowapp.contract.IUseCase
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
-import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
-import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

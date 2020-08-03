@@ -1,9 +1,9 @@
 package com.prasan.kotlinmvvmhiltflowapp.data
 
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
-import com.prasan.kotlinmvvmhiltflowapp.data.contract.IRemoteDataSource
+import com.prasan.kotlinmvvmhiltflowapp.contract.IRemoteDataSource
+import com.prasan.kotlinmvvmhiltflowapp.contract.IRepository
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
-import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

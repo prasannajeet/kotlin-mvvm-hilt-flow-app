@@ -1,7 +1,6 @@
-package com.prasan.kotlinmvvmhiltflowapp.domain.contract
+package com.prasan.kotlinmvvmhiltflowapp.contract
 
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
-import com.prasan.kotlinmvvmhiltflowapp.data.contract.IRemoteDataSource
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

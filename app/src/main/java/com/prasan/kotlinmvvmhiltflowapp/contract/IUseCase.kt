@@ -1,4 +1,4 @@
-package com.prasan.kotlinmvvmhiltflowapp.domain.contract
+package com.prasan.kotlinmvvmhiltflowapp.contract
 
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
