@@ -2,7 +2,6 @@ package com.prasan.kotlinmvvmhiltflowapp.domain.usecase
 
 import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
-import com.prasan.kotlinmvvmhiltflowapp.data.FHPRepository
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import com.prasan.kotlinmvvmhiltflowapp.domain.contract.IRepository
 import com.prasan.kotlinmvvmhiltflowapp.domain.contract.UseCase
@@ -28,7 +27,8 @@ class GetPopularPhotosUseCase @Inject constructor(private val repository: IRepos
     @ExperimentalCoroutinesApi
     override suspend fun execute(input: Int): Flow<ViewState<PhotoResponse>> = flow {
         emit(ViewState.Loading(true))
-        (repository as FHPRepository).getPopularPhotos(input).collect {
+
+        repository.getPhotosByPage(input).collect {
             when (it) {
                 is NetworkOperationResult.OnSuccess -> emit(ViewState.RenderSuccess(it.data))
                 is NetworkOperationResult.OnFailed -> emit(ViewState.RenderFailure(it.throwable))
