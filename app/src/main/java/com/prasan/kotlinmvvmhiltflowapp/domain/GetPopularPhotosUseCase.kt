@@ -7,10 +7,7 @@ import com.prasan.kotlinmvvmhiltflowapp.contract.IUseCase
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,13 +24,15 @@ class GetPopularPhotosUseCase @Inject constructor(override val repository: IRepo
     @ExperimentalCoroutinesApi
     override suspend fun execute(input: Int): Flow<ViewState<PhotoResponse>> = flow {
         emit(ViewState.Loading(true))
-
-        repository.getPhotosByPage(input).collect {
+        repository.getPhotosByPage(input).map {
             when (it) {
-                is NetworkOperationResult.OnSuccess -> emit(ViewState.RenderSuccess(it.data))
-                is NetworkOperationResult.OnFailed -> emit(ViewState.RenderFailure(it.throwable))
+                is NetworkOperationResult.OnSuccess -> ViewState.RenderSuccess(it.data)
+                is NetworkOperationResult.OnFailed -> ViewState.RenderFailure(it.throwable)
             }
-            emit(ViewState.Loading(false))
+        }.collect {
+            emit(it)
         }
+        emit(ViewState.Loading(false))
     }.flowOn(Dispatchers.IO)
+
 }
