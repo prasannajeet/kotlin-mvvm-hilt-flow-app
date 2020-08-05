@@ -1,10 +1,9 @@
 package com.prasan.kotlinmvvmhiltflowapp.contract
 
-import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 
 /**
  * This interface provides contracts a web-service class needs to abide by to provide the app
@@ -20,10 +19,10 @@ interface IWebService {
      * table, if so return the data from the db, else perform a retrofit call to obtain and store the data
      * into the db before returning the same
      * @param pageNumber Page number of the data called in a paginated data source
-     * @return [Response] of [PhotoResponse] type
+     * @return [IOTaskResult] of [PhotoResponse] type
      */
     @ExperimentalCoroutinesApi
     suspend fun getPhotosByPage(
         pageNumber: Int
-    ): Flow<NetworkOperationResult<PhotoResponse>>
+    ): Flow<IOTaskResult<PhotoResponse>>
 }

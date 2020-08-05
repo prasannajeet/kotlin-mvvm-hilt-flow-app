@@ -12,6 +12,7 @@ import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoDetails
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import com.prasan.kotlinmvvmhiltflowapp.domain.GetPopularPhotosUseCase
+import com.prasan.kotlinmvvmhiltflowapp.getViewStateFlowForNetworkCall
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -62,19 +63,20 @@ class MainViewModel @ViewModelInject constructor(
 
         if (currentPageNumber < maximumPageNumber) {
             viewModelScope.launch {
-                getPopularPhotosUseCase.execute(currentPageNumber)
-                    .collect {
-                        when (it) {
-                            is ViewState.Loading -> popularPhotosLiveData.value = it
-                            is ViewState.RenderFailure -> popularPhotosLiveData.value = it
-                            is ViewState.RenderSuccess<PhotoResponse> -> {
-                                currentPageNumber++
-                                maximumPageNumber = it.output.totalPages
-                                photoList.addAll(it.output.photos)
-                                popularPhotosLiveData.value = ViewState.RenderSuccess(photoList)
-                            }
+                getViewStateFlowForNetworkCall {
+                    getPopularPhotosUseCase.execute(currentPageNumber)
+                }.collect {
+                    when (it) {
+                        is ViewState.Loading -> popularPhotosLiveData.value = it
+                        is ViewState.RenderFailure -> popularPhotosLiveData.value = it
+                        is ViewState.RenderSuccess<PhotoResponse> -> {
+                            currentPageNumber++
+                            maximumPageNumber = it.output.totalPages
+                            photoList.addAll(it.output.photos)
+                            popularPhotosLiveData.value = ViewState.RenderSuccess(photoList)
                         }
                     }
+                }
             }
         }
     }

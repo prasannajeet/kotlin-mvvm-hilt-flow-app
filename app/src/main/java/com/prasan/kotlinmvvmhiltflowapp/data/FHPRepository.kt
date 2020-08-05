@@ -1,6 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.data
 
-import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import com.prasan.kotlinmvvmhiltflowapp.contract.IRemoteDataSource
 import com.prasan.kotlinmvvmhiltflowapp.contract.IRepository
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
@@ -21,6 +21,6 @@ class FHPRepository @Inject constructor(override val remoteDataSource: IRemoteDa
     IRepository {
 
     @ExperimentalCoroutinesApi
-    override suspend fun getPhotosByPage(pageNumber: Int): Flow<NetworkOperationResult<PhotoResponse>> =
+    override suspend fun getPhotosByPage(pageNumber: Int): Flow<IOTaskResult<PhotoResponse>> =
         remoteDataSource.getPhotosByPage(pageNumber)
 }

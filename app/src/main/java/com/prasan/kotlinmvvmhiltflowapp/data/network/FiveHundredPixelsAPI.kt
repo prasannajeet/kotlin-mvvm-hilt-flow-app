@@ -1,5 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.data.network
 
+import com.prasan.kotlinmvvmhiltflowapp.BuildConfig
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -23,8 +24,8 @@ interface FiveHundredPixelsAPI {
      */
     @GET("/v1/photos?image_size=5,6")
     suspend fun getPopularPhotos(
-        @Query("consumer_key") key: String,
-        @Query("feature") feature: String,
+        @Query("consumer_key") key: String = BuildConfig.API_KEY,
+        @Query("feature") feature: String = "popular",
         @Query("page") page: Int
     ): Response<PhotoResponse>
 

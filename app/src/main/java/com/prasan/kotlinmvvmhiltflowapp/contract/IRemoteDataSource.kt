@@ -1,6 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.contract
 
-import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +20,8 @@ interface IRemoteDataSource {
     /**
      * Requests the webservice class to obtain a list of photos by page number
      * @param pageNumber Page Number
-     * @return [Flow] of [NetworkOperationResult] of [PhotoResponse] type
+     * @return [Flow] of [IOTaskResult] of [PhotoResponse] type
      */
     @ExperimentalCoroutinesApi
-    suspend fun getPhotosByPage(pageNumber: Int): Flow<NetworkOperationResult<PhotoResponse>>
+    suspend fun getPhotosByPage(pageNumber: Int): Flow<IOTaskResult<PhotoResponse>>
 }

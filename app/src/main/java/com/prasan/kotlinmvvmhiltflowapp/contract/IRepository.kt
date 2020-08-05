@@ -1,6 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.contract
 
-import com.prasan.kotlinmvvmhiltflowapp.NetworkOperationResult
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.PhotoResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,5 +25,5 @@ interface IRepository {
      * @param pageNumber Page number of the data called in a paginated data source
      */
     @ExperimentalCoroutinesApi
-    suspend fun getPhotosByPage(pageNumber: Int): Flow<NetworkOperationResult<PhotoResponse>>
+    suspend fun getPhotosByPage(pageNumber: Int): Flow<IOTaskResult<PhotoResponse>>
 }

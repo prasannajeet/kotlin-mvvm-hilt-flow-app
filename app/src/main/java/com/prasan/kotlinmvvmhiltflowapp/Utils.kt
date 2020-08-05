@@ -31,26 +31,26 @@ typealias NetworkAPIInvoke<T> = suspend () -> Response<T>
 typealias ListItemClickListener<T> = (T) -> Unit
 
 /**
- * Sealed class type-restricts the result of API calls to success and failure. The type
+ * Sealed class type-restricts the result of IO calls to success and failure. The type
  * <T> represents the model class expected from the API call in case of a success
  * In case of success, the result will be wrapped around the OnSuccessResponse class
  * In case of error, the throwable causing the error will be wrapped around OnErrorResponse class
  * @author Prasan
  * @since 1.0
  */
-sealed class NetworkOperationResult<out DTO : Any> {
-    data class OnSuccess<out DTO : Any>(val data: DTO) : NetworkOperationResult<DTO>()
-    data class OnFailed(val throwable: Throwable) : NetworkOperationResult<Nothing>()
+sealed class IOTaskResult<out DTO : Any> {
+    data class OnSuccess<out DTO : Any>(val data: DTO) : IOTaskResult<DTO>()
+    data class OnFailed(val throwable: Throwable) : IOTaskResult<Nothing>()
 }
 
 /**
  * Utility function that works to perform a Retrofit API call and return either a success model
  * instance or an error message wrapped in an [Exception] class
- * @param messageInCaseOfError Custom error message to wrap around [NetworkOperationResult.OnFailed]
+ * @param messageInCaseOfError Custom error message to wrap around [IOTaskResult.OnFailed]
  * with a default value provided for flexibility
  * @param networkApiCall lambda representing a suspend function for the Retrofit API call
- * @return [NetworkOperationResult.OnSuccess] object of type [T], where [T] is the success object wrapped around
- * [NetworkOperationResult.OnSuccess] if network call is executed successfully, or [NetworkOperationResult.OnFailed]
+ * @return [IOTaskResult.OnSuccess] object of type [T], where [T] is the success object wrapped around
+ * [IOTaskResult.OnSuccess] if network call is executed successfully, or [IOTaskResult.OnFailed]
  * object wrapping an [Exception] class stating the error
  * @since 1.0
  */
@@ -60,20 +60,20 @@ suspend fun <T : Any> performSafeNetworkApiCall(
     allowRetries: Boolean = true,
     numberOfRetries: Int = 2,
     networkApiCall: NetworkAPIInvoke<T>
-): Flow<NetworkOperationResult<T>> {
+): Flow<IOTaskResult<T>> {
     var delayDuration = 1000L
     val delayFactor = 2
     return flow {
         val response = networkApiCall()
         if (response.isSuccessful) {
             response.body()?.let {
-                emit(NetworkOperationResult.OnSuccess(it))
+                emit(IOTaskResult.OnSuccess(it))
             }
-                ?: emit(NetworkOperationResult.OnFailed(IOException("API call successful but empty response body")))
+                ?: emit(IOTaskResult.OnFailed(IOException("API call successful but empty response body")))
             return@flow
         }
         emit(
-            NetworkOperationResult.OnFailed(
+            IOTaskResult.OnFailed(
                 IOException(
                     "API call failed with error - ${response.errorBody()
                         ?.string() ?: messageInCaseOfError}"
@@ -82,7 +82,7 @@ suspend fun <T : Any> performSafeNetworkApiCall(
         )
         return@flow
     }.catch { e ->
-        emit(NetworkOperationResult.OnFailed(IOException("Exception during network API call: ${e.message}")))
+        emit(IOTaskResult.OnFailed(IOException("Exception during network API call: ${e.message}")))
         return@catch
     }.retryWhen { cause, attempt ->
         if (!allowRetries || attempt > numberOfRetries || cause !is IOException) return@retryWhen false
@@ -214,3 +214,25 @@ fun Photo.durationPosted(): String {
         "$this ago"
     }
 }
+
+/**
+ * Util method that takes a suspend function returning a [Flow] of [IOTaskResult] as input param and returns a
+ * [Flow] of [ViewState], which emits [ViewState.Loading] with true prior to performing the IO Task. If the
+ * IO operation results a [IOTaskResult.OnSuccess], the result is mapped to a [ViewState.RenderSuccess] instance and emitted,
+ * else a [IOTaskResult.OnFailed] is mapped to a [ViewState.RenderFailure] instance and emitted.
+ * The flowable is then completed by emitting a [ViewState.Loading] with false
+ */
+@ExperimentalCoroutinesApi
+suspend fun <T : Any> getViewStateFlowForNetworkCall(ioOperation: suspend () -> Flow<IOTaskResult<T>>) =
+    flow {
+        emit(ViewState.Loading(true))
+        ioOperation().map {
+            when (it) {
+                is IOTaskResult.OnSuccess -> ViewState.RenderSuccess(it.data)
+                is IOTaskResult.OnFailed -> ViewState.RenderFailure(it.throwable)
+            }
+        }.collect {
+            emit(it)
+        }
+        emit(ViewState.Loading(false))
+    }.flowOn(Dispatchers.IO)

@@ -1,6 +1,6 @@
 package com.prasan.kotlinmvvmhiltflowapp.contract
 
-import com.prasan.kotlinmvvmhiltflowapp.ViewState
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
@@ -23,5 +23,5 @@ interface IUseCase<in I : Any, out O : Any> {
      * @return [O] model type used to define the UseCase class
      */
     @ExperimentalCoroutinesApi
-    suspend fun execute(input: I): Flow<ViewState<O>>
+    suspend fun execute(input: I): Flow<IOTaskResult<O>>
 }

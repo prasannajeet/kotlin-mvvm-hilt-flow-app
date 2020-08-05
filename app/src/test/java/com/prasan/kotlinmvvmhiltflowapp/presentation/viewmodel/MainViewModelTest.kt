@@ -2,6 +2,7 @@ package com.prasan.kotlinmvvmhiltflowapp.presentation.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.prasan.kotlinmvvmhiltflowapp.IOTaskResult
 import com.prasan.kotlinmvvmhiltflowapp.TestCoroutineRule
 import com.prasan.kotlinmvvmhiltflowapp.ViewState
 import com.prasan.kotlinmvvmhiltflowapp.data.datamodel.Photo
@@ -33,15 +34,11 @@ class MainViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     private val fakeSuccessFlow = flow {
-        emit(ViewState.Loading(true))
-        emit(ViewState.RenderSuccess(mockPhotoResponse))
-        emit(ViewState.Loading(false))
+        emit(IOTaskResult.OnSuccess(mockPhotoResponse))
     }
 
     private val fakeFailureFlow = flow {
-        emit(ViewState.Loading(true))
-        emit(ViewState.RenderFailure(mockException))
-        emit(ViewState.Loading(false))
+        emit(IOTaskResult.OnFailed(mockException))
     }
 
     @RelaxedMockK
