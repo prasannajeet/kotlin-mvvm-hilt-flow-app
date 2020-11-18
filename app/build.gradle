@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "androidx.navigation.safeargs.kotlin"
-apply from: 'gradleScripts/dependencies.gradle'
 
 //def myConfigPropertiesFile = rootProject.file("config")
 //def myConfigProperties = new Properties()
@@ -12,7 +11,6 @@ apply from: 'gradleScripts/dependencies.gradle'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.prasan.kotlinmvvmhiltflowapp"
@@ -60,54 +58,53 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // Kotlin specific dependencies
-    implementation kotlinDependencies.kotlinStdlib
-    implementation kotlinDependencies.coroutinesCore
-    implementation kotlinDependencies.coroutinesAndroid
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.10'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
 
     // Core Android dependencies
-    implementation androidxDependencies.core
-    implementation androidxDependencies.appCompat
-    implementation androidxDependencies.constraintLayout
-    implementation androidxDependencies.navigationFragment
-    implementation androidxDependencies.recyclerView
-    implementation androidxDependencies.legacy
-    implementation androidxDependencies.lifecycleExtensions
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // UI
-    implementation utilLibs.circleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     // Networking
-    implementation networkingDependencies.retrofitCore
-    implementation networkingDependencies.retrofitMoshiConverter
-    implementation networkingDependencies.moshi
-    kapt networkingDependencies.moshiAnnotation
-    implementation networkingDependencies.okhttp
-    implementation networkingDependencies.okhttpLoggingInterceptor
-    implementation (networkingDependencies.picasso){
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.8.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.7.2'
+    implementation ('com.squareup.picasso:picasso:2.71828'){
         exclude group: "com.android.support"
     }
 
     // Android KTX
-    implementation androidKtx.activityKtx
-    implementation androidKtx.fragmentKtx
-    implementation androidKtx.runtimeKtx
-    implementation androidKtx.navigationKtx
-    implementation androidKtx.liveDataKtx
+    implementation 'androidx.activity:activity-ktx:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     // Test
-    testImplementation testing.junit
-    androidTestImplementation testing.junitAndroid
-    androidTestImplementation testing.espresso
-    testImplementation testing.mockk
-    testImplementation testing.coroutinesTest
-    testImplementation testing.androidCoreTest
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'io.mockk:mockk:1.10.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.7'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 
-    coreLibraryDesugaring utilLibs.coreDesugaring
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
-    // Since these are alpha dependencies and subject to change they will remain outside of the
-    // dependencies.gradle script till they reach 1.0.0
-    implementation "com.google.dagger:hilt-android:2.28.1-alpha"
-    kapt "com.google.dagger:hilt-android-compiler:2.28.1-alpha"
+    // Alphas
+    implementation 'com.google.dagger:hilt-android:2.28.1-alpha'
+    kapt 'com.google.dagger:hilt-android-compiler:2.28.1-alpha'
     implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha02'
     kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 }
