@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="8dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="0dp"
+        app:cardPreventCornerOverlap="false">
 
         <ImageView
             android:id="@+id/popular_photo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="@string/photo_from_popular_section"
+            android:layout_margin="2dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             tools:src="@drawable/ic_launcher_background" />
 
-    </FrameLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

@@ -12,11 +12,6 @@
             android:id="@+id/popular_photo_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:padding="2dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
-            tools:itemCount="30"
             tools:listitem="@layout/popular_photos_item" />
 
         <ProgressBar
